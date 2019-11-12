@@ -4,7 +4,7 @@ import pygame
 class Airplane(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
-        self.image = pygame.image.load('jet2.png')
+        self.image = pygame.image.load('images/jet2.png')
         self.display_image = self.image
         self.width = self.image.get_width()
         self.height = self.image.get_height()
@@ -18,7 +18,7 @@ class Airplane(pygame.sprite.Sprite):
             delta_theta = self.rot_speed
         if mode == 'right':
             delta_theta = -self.rot_speed
-        if mode == 'straight':
+        if mode == 'forward':
             delta_theta = 0
         self.display_image = pygame.transform.rotate(self.display_image, delta_theta)
         self.vel = self.vel.rotate(delta_theta)

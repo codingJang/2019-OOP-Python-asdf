@@ -24,15 +24,31 @@ missiles.add(Missile(100, 700))  # 같은 방식
 
 user_plane = Airplane(400, 400)  # 사용자 비행기 객체 생성
 
-running = True
+
 clock = pygame.time.Clock()  # clock (화면 리프레시 속도 조절용)
+cnt = 0
+running = True
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:  # 닫으면 나가기
             running = False
-    screen.fill((0, 0, 0))
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                direction = 'left'
+                cnt += 1
+            if event.key == pygame.K_RIGHT:
+                direction = 'right'
+                cnt += 1
+        if event.type == pygame.KEYUP:
+            if event.key in (pygame.K_LEFT, pygame.K_RIGHT):
+                cnt -= 1
+    if cnt == 0:
+        direction = 'forward'
+    screen.fill((255, 255, 255))
     for missile in missiles:  # missiles 그룹 내의 모든 missile 에 대해
-        missile.update(user_plane.vel)  # 각 missile 객체의 update 함수 실행! 매개변수: 현재 비행기의 속도 벡터
+        missile.update(user_plane.vel, user_plane.loc)  # 각 missile 객체의 update 함수 실행! 매개변수: 현재 비행기의 속도 벡터
         screen.blit(missile.display_image, (missile.loc.x, missile.loc.y))  # missile 의 현재 모습을 업데이트
+    user_plane.update(direction)
+    screen.blit(user_plane.display_image, (user_plane.loc.x, user_plane.loc.y))  # user_plane의 현재 모습을 업데이트
     pygame.display.update()
     clock.tick(60)  # 화면 리프레스 속도 조절 (60 frames per second)
