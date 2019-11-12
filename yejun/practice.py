@@ -18,6 +18,8 @@ M = pygame.math.Vector2()
 v = pygame.math.Vector2(speed, 0)
 t = pygame.math.Vector2()
 
+clock = pygame.time.Clock()
+
 running = True
 while running:
     for event in pygame.event.get():
@@ -26,16 +28,11 @@ while running:
     M.update(pygame.mouse.get_pos())
     t.update(M - X)
     crossed = v.cross(t)
-    v_R, v_theta = v.as_polar()
-    t_R, t_theta = t.as_polar()
-    delta_theta = math.fabs(t_theta - v_theta)
-    if delta_theta > 180:
-        delta_theta -= 180
-    delta_theta = delta_theta if delta_theta < max_rot_speed else max_rot_speed
+    _, v_theta = v.as_polar()
     if crossed > 0:
-        v = v.rotate(delta_theta)
+        v = v.rotate(max_rot_speed)
     else:
-        v = v.rotate(-delta_theta)
+        v = v.rotate(-max_rot_speed)
     # print(v_R, v_theta)
     rotated_image = pygame.transform.rotate(my_image, -v_theta)
     X += v
