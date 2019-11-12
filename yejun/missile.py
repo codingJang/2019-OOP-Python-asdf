@@ -1,11 +1,9 @@
 import pygame
 from math import fabs
 
-screen_w, screen_h = 800, 800
-
 
 class Missile(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, x, y):
         super().__init__()
         self.image = pygame.image.load('ufo.png')
         self.display_image = None
@@ -13,8 +11,8 @@ class Missile(pygame.sprite.Sprite):
         self.height = self.image.get_height()
         self.trans_speed = 0.2
         self.rot_speed = 0.2
-        self.loc = pygame.math.Vector2(screen_w / 2 - self.w / 2, screen_h / 2 - self.h / 2)
-        self.vel = pygame.math.Vector2(self.speed, 0)
+        self.loc = pygame.math.Vector2(x, y)
+        self.vel = pygame.math.Vector2(self.trans_speed, 0)
 
     def update(self):
         mouse_loc = pygame.math.Vector2(pygame.mouse.get_pos())
@@ -24,5 +22,5 @@ class Missile(pygame.sprite.Sprite):
             self.vel = self.vel.rotate(self.rot_speed)
         else:
             self.vel = self.vel.rotate(-self.rot_speed)
-        self.X += self.vel
+        self.loc += self.vel
         self.display_image = pygame.transform.rotate(self.image, -vel_theta)
