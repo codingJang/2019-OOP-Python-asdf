@@ -8,7 +8,7 @@ class Missile(pygame.sprite.Sprite):
         self.display_image = None
         self.width = self.image.get_width()
         self.height = self.image.get_height()
-        self.trans_speed = 5
+        self.trans_speed = 3
         self.rot_speed = 5
         self.loc = pygame.math.Vector2(x, y)
         self.vel = pygame.math.Vector2(self.trans_speed, 0)
@@ -16,10 +16,10 @@ class Missile(pygame.sprite.Sprite):
     def update(self, plane_loc, plane_vel):
         plane_loc = pygame.math.Vector2(plane_loc)
         plane_vec = pygame.math.Vector2(plane_loc - self.loc)
-        _, vel_theta = self.vel.as_polar()
         if self.vel.cross(plane_vec) > 0:
             self.vel = self.vel.rotate(self.rot_speed)
         else:
             self.vel = self.vel.rotate(-self.rot_speed)
-        self.loc += self.vel - plane_vel
+        _, vel_theta = self.vel.as_polar()
         self.display_image = pygame.transform.rotate(self.image, -vel_theta)
+        self.loc += self.vel - plane_vel
