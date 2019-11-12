@@ -3,7 +3,7 @@ import math
 
 pygame.init()
 
-my_image = pygame.image.load('ufo.png')
+my_image = pygame.image.load("비행기1.png")
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Practice...!")
 pygame.display.set_icon(my_image)
