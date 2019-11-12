@@ -42,5 +42,5 @@ while running:
     rw = rotated_image.get_width()
     rh = rotated_image.get_height()
     screen.fill((0, 255, 255))
-    screen.blit(rotated_image, (X.x + w/2 - rw/2, X.y + h/2 - rh/2))
+    screen.blit(rotated_image, (X.x + w/2 - rw/2, X.y + h/2 - rh)/2)
     pygame.display.update()
