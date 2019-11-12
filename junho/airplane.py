@@ -22,4 +22,3 @@ class Airplane(pygame.sprite.Sprite):
             delta_theta = 0
         self.display_image = pygame.transform.rotate(self.display_image, delta_theta)
         self.vel = self.vel.rotate(delta_theta)
-
