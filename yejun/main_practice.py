@@ -4,6 +4,7 @@
 대충 이런 flow 로 메인 코드가 개발되어야 협업이 편할 것 같음!
 https://www.101computing.net/pygame-how-tos/
 여기 이미지의 flow chart를 참고하시길
+암튼 꼭 참고하세요
 """
 
 import pygame  # pygame 가져오기
