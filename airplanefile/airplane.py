@@ -1,7 +1,4 @@
 import pygame
-from math import fabs
-
-screen_w, screen_h = 800, 800
 
 
 class Airplane(pygame.sprite.Sprite):
@@ -18,11 +15,11 @@ class Airplane(pygame.sprite.Sprite):
 
     def update(self, mode):
         if mode == 'left':
-            delta = self.rot_speed
+            delta_theta = self.rot_speed
         if mode == 'right':
-            delta = -self.rot_speed
+            delta_theta = -self.rot_speed
         if mode == 'straight':
-            delta = 0
-        self.display_image = pygame.transform.rotate(self.display_image, delta)
-        self.vel = self.vel.rotate(delta)
+            delta_theta = 0
+        self.display_image = pygame.transform.rotate(self.display_image, delta_theta)
+        self.vel = self.vel.rotate(delta_theta)
 
