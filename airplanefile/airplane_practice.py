@@ -17,16 +17,18 @@ cnt = 0
 
 running = True
 while running:
-    clock.tick(144)
+    clock.tick(60)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                delta = 0.5
+                # 1
+                delta = 3
                 cnt += 1
             if event.key == pygame.K_RIGHT:
-                delta = -0.5
+                # -1
+                delta = -3
                 cnt += 1
         if event.type == pygame.KEYUP:
             if event.key in (pygame.K_LEFT, pygame.K_RIGHT):

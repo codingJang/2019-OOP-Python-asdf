@@ -26,3 +26,4 @@ class Missile(pygame.sprite.Sprite):
             self.vel = self.vel.rotate(-self.rot_speed)
         self.X += self.vel
         self.display_image = pygame.transform.rotate(self.image, -vel_theta)
+        
