@@ -9,8 +9,8 @@ class Missile(pygame.sprite.Sprite):
         self.display_image = None
         self.width = self.image.get_width()
         self.height = self.image.get_height()
-        self.trans_speed = 0.2
-        self.rot_speed = 0.2
+        self.trans_speed = 5
+        self.rot_speed = 5
         self.loc = pygame.math.Vector2(x, y)
         self.vel = pygame.math.Vector2(self.trans_speed, 0)
 
