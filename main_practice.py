@@ -32,25 +32,23 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:  # 닫으면 나가기
             running = False
-        if event.type == pygame.KEYDOWN:  # KEYDOWN 이벤트 발생
-            if event.key == pygame.K_LEFT:  # left 를 눌렀다면
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
                 direction = 'left'
                 cnt += 1
-            if event.key == pygame.K_RIGHT:  # right 를 눌렀다면
+            if event.key == pygame.K_RIGHT:
                 direction = 'right'
                 cnt += 1
-        if event.type == pygame.KEYUP:  # 키보드에서 손가락을 떼면
+        if event.type == pygame.KEYUP:
             if event.key in (pygame.K_LEFT, pygame.K_RIGHT):
                 cnt -= 1
-    if cnt == 0 or cnt == 2:
+    if cnt == 0:
         direction = 'forward'
     screen.fill((255, 255, 255))
-
     for missile in missiles:  # missiles 그룹 내의 모든 missile 에 대해
         missile.update(user_plane.loc, user_plane.vel)  # 각 missile 객체의 update 함수 실행! 매개변수: 현재 비행기의 속도 벡터
         screen.blit(missile.display_image, (missile.loc.x, missile.loc.y))  # missile 의 현재 모습을 업데이트
-
     user_plane.update(direction)
-    screen.blit(user_plane.display_image, (user_plane.loc.x, user_plane.loc.y))  # user_plane 의 현재 모습을 업데이트
+    screen.blit(user_plane.display_image, (user_plane.loc.x - user_plane.rw, user_plane.loc.y - user_plane.rh))  # user_plane의 현재 모습을 업데이트
     pygame.display.update()
     clock.tick(60)  # 화면 리프레시 속도 조절 (60 frames per second)
