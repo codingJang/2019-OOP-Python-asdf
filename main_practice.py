@@ -49,6 +49,6 @@ while running:
         missile.update(user_plane.loc, user_plane.vel)  # 각 missile 객체의 update 함수 실행! 매개변수: 현재 비행기의 속도 벡터
         screen.blit(missile.display_image, (missile.loc.x, missile.loc.y))  # missile 의 현재 모습을 업데이트
     user_plane.update(direction)
-    screen.blit(user_plane.display_image, (user_plane.loc.x, user_plane.loc.y))  # user_plane의 현재 모습을 업데이트
+    screen.blit(user_plane.display_image, (user_plane.loc.x - user_plane.rw, user_plane.loc.y - user_plane.rh))  # user_plane의 현재 모습을 업데이트
     pygame.display.update()
     clock.tick(60)  # 화면 리프레시 속도 조절 (60 frames per second)
