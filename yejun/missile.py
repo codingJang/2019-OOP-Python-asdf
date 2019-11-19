@@ -14,7 +14,6 @@ class Missile(pygame.sprite.Sprite):
         self.vel = pygame.math.Vector2(self.trans_speed, 0)
 
     def update(self, plane_loc, plane_vel):
-        plane_loc = pygame.math.Vector2(plane_loc)
         plane_vec = pygame.math.Vector2(plane_loc - self.loc)
         if self.vel.cross(plane_vec) > 0:
             self.vel = self.vel.rotate(self.rot_speed)
