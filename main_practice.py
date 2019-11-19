@@ -49,7 +49,7 @@ while running:
         if event.type == pygame.KEYUP:
             if event.key in (pygame.K_LEFT, pygame.K_RIGHT):
                 cnt -= 1
-    if cnt == 0:
+    if cnt == 0 or cnt == 2:
         direction = 'forward'
     screen.fill((255, 255, 255))
     for missile in missiles:  # missiles 그룹 내의 모든 missile 에 대해
