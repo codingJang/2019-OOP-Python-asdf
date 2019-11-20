@@ -4,7 +4,7 @@ import pygame
 class Missile(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
-        self.image = pygame.image.load('images/ufo.png')
+        self.image = pygame.image.load('images/missile1.png')
         self.display_image = None
         self.width = self.image.get_width()
         self.height = self.image.get_height()

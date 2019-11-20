@@ -58,4 +58,4 @@ while running:
     user_plane.update(direction)
     center_blit(user_plane)  # user_plane의 현재 모습을 업데이트
     pygame.display.update()
-    clock.tick(60)  # 화면 리프레시 속도 조절 (60 frames per second)
+    clock.tick(100)  # 화면 리프레시 속도 조절 (60 frames per second)
