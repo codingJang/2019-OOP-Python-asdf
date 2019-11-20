@@ -4,7 +4,7 @@ import pygame
 class Missile(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
-        self.image = pygame.image.load('images/missile1.png')
+        self.image = pygame.image.load('images/missile_1.png')
         self.display_image = None
         self.width = self.image.get_width()
         self.height = self.image.get_height()
@@ -20,5 +20,5 @@ class Missile(pygame.sprite.Sprite):
         else:
             self.vel = self.vel.rotate(-self.rot_speed)
         _, theta = self.vel.as_polar()
-        self.display_image = pygame.transform.rotate(self.image, -theta)
+        self.display_image = pygame.transform.rotate(self.image, -theta - 90)
         self.loc += self.vel - plane_vel
