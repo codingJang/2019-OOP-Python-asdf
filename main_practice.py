@@ -25,6 +25,36 @@ missiles.add(Missile(100, 700))  # 같은 방식
 user_plane = Airplane(400, 400)  # 사용자 비행기 객체 생성
 
 
+class Background(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.x = x
+        self.y = y
+        self.image = pygame.image.load("yurim/background.png")
+
+
+bg_length = 800
+bg1 = Background(0, 0)
+bg2 = Background(bg_length, 0)
+bg3 = Background(0, 0)
+bg4 = Background(0, 0)
+
+
+def background_moving(drec_x, drec_y):
+
+    bg1.x -= 5
+    bg2.x -= 5
+
+    if bg1.x == -bg_length:
+        bg1.x = bg_length
+    if bg2.x == -bg_length:
+        bg2.x = bg_length
+
+    screen.blit(bg1.image, (bg1.x, bg1.y))
+    screen.blit(bg2.image, (bg2.x, bg2.y))
+    pygame.display.update()
+
+
 clock = pygame.time.Clock()  # clock (화면 리프레시 속도 조절용)
 cnt = 0
 running = True
@@ -45,6 +75,7 @@ while running:
     if cnt == 0 or cnt == 2:
         direction = 'forward'
     screen.fill((255, 255, 255))
+    background_moving(user_plane.vel.x, user_plane.vel.y)
 
     for missile in missiles:  # missiles 그룹 내의 모든 missile 에 대해
         missile.update(user_plane.loc, user_plane.vel)  # 각 missile 객체의 update 함수 실행! 매개변수: 현재 비행기의 속도 벡터
