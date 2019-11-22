@@ -54,14 +54,12 @@ backgrounds.add(bg4)
 def background_moving(dir_x, dir_y):
 
     for i in backgrounds:
-        i.x -= dir_x*5
-        i.y -= dir_y*5
-        print("*")
+        i.x -= dir_x*6
+        i.y -= dir_y*6
 
     for i in backgrounds:
         if i.x < -bg_length:
             i.x = bg_length
-            print("*")
         elif i.x > bg_length:
             i.x = -bg_length
         if i.y < -bg_length:
@@ -73,24 +71,6 @@ def background_moving(dir_x, dir_y):
         screen.blit(i.image, (i.x, i.y))
 
     pygame.display.update()
-
-# def background_moving(drec_x, drec_y):
-#
-#     bg1.x -= 5
-#     bg2.x -= 5
-#
-#     if bg1.x == -bg_length:
-#         bg1.x = bg_length
-#     if bg2.x == -bg_length:
-#         bg2.x = bg_length
-#     # if bg1.x == bg_length:
-#     #     bg1.x = -bg_length
-#     # if bg2.x == bg_length:
-#     #     bg2.x = -bg_length
-#
-#     screen.blit(bg1.image, (bg1.x, bg1.y))
-#     screen.blit(bg2.image, (bg2.x, bg2.y))
-#     pygame.display.update()
 
 
 clock = pygame.time.Clock()  # clock (화면 리프레시 속도 조절용)
@@ -112,7 +92,7 @@ while running:
                 cnt -= 1
     if cnt == 0 or cnt == 2:
         direction = 'forward'
-    screen.fill((102, 204, 255))
+    screen.fill((102, 204, 255))    # 배경 사이 틈 같은색으로 매꾸기
     background_moving(user_plane.vel.x, user_plane.vel.y)
 
     for missile in missiles:  # missiles 그룹 내의 모든 missile 에 대해
