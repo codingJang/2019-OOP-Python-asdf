@@ -12,6 +12,14 @@ from yejun.missile import Missile  # 장예준이 만든 Missiles 클래스
 from junho.airplane import Airplane  # 장준호가 만든 Airplanes 클래스
 
 
+class Background(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.x = x
+        self.y = y
+        self.image = pygame.image.load("yurim/background.png")
+
+
 def center_blit(sprite):
     screen.blit(sprite.display_image,
                 (sprite.loc.x - sprite.display_image.get_width()/2,
@@ -31,34 +39,37 @@ missiles.add(Missile(100, 700))  # 같은 방식
 
 user_plane = Airplane(400, 400)  # 사용자 비행기 객체 생성
 
-
-class Background(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        super().__init__()
-        self.x = x
-        self.y = y
-        self.image = pygame.image.load("yurim/background.png")
-
-
 bg_length = 800
+backgrounds = pygame.sprite.Group()
 bg1 = Background(0, 0)
 bg2 = Background(bg_length, 0)
-bg3 = Background(0, 0)
-bg4 = Background(0, 0)
+bg3 = Background(0, bg_length)
+bg4 = Background(bg_length, bg_length)
+backgrounds.add(bg1)
+backgrounds.add(bg2)
+backgrounds.add(bg3)
+backgrounds.add(bg4)
 
 
-def background_moving(drec_x, drec_y):
+def background_moving(dir_x, dir_y):
 
-    bg1.x -= 5
-    bg2.x -= 5
+    for i in backgrounds:
+        i.x -= dir_x*6
+        i.y -= dir_y*6
 
-    if bg1.x == -bg_length:
-        bg1.x = bg_length
-    if bg2.x == -bg_length:
-        bg2.x = bg_length
+    for i in backgrounds:
+        if i.x < -bg_length:
+            i.x = bg_length
+        elif i.x > bg_length:
+            i.x = -bg_length
+        if i.y < -bg_length:
+            i.y = bg_length
+        elif i.y > bg_length:
+            i.y = -bg_length
 
-    screen.blit(bg1.image, (bg1.x, bg1.y))
-    screen.blit(bg2.image, (bg2.x, bg2.y))
+    for i in backgrounds:
+        screen.blit(i.image, (i.x, i.y))
+
     pygame.display.update()
 
 
@@ -81,7 +92,7 @@ while running:
                 cnt -= 1
     if cnt == 0 or cnt == 2:
         direction = 'forward'
-    screen.fill((255, 255, 255))
+    screen.fill((102, 204, 255))    # 배경 사이 틈 같은색으로 매꾸기
     background_moving(user_plane.vel.x, user_plane.vel.y)
 
     for missile in missiles:  # missiles 그룹 내의 모든 missile 에 대해
