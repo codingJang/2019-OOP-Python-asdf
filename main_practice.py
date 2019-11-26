@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 이유림이 반드시 참고해야 할 것...!!
 ****매우 중요****
@@ -12,6 +13,7 @@ from yejun.missile import Missile  # 장예준이 만든 Missile 클래스
 from junho.airplane import Airplane  # 장준호가 만든 Airplane 클래스
 from yurim.background import Background  # 이유림이 만든 Background 클래스
 from yejun.blit_methods import *
+from yurim.button import Button
 
 
 pygame.init()
