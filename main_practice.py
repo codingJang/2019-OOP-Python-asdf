@@ -77,7 +77,7 @@ while running:
     missiles.update(screen, user_plane.loc, user_plane.vel)  # missiles Group 내의 모든 missile 에 대해 update() 함수 실행
     user_plane.update(screen, events)  # 같은 방식
 
-    plane_collision = pygame.sprite.spritecollide(user_plane, missiles, True, pygame.sprite.collide_mask)
+    plane_collision = pygame.sprite.spritecollide(user_plane, missiles, True)
     if len(plane_collision) != 0:
         print("DEATH")
 
