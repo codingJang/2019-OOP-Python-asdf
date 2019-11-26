@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 이유림이 반드시 참고해야 할 것...!!
 ****매우 중요****
@@ -12,6 +13,7 @@ from yejun.missile import Missile  # 장예준이 만든 Missile 클래스
 from junho.airplane import Airplane  # 장준호가 만든 Airplane 클래스
 from yurim.background import Background  # 이유림이 만든 Background 클래스
 from yejun.blit_methods import *
+from yurim.button import Button
 
 
 pygame.init()
@@ -25,6 +27,32 @@ backgrounds.add(Background(0, 0))
 backgrounds.add(Background(bg_length, 0))
 backgrounds.add(Background(0, bg_length))
 backgrounds.add(Background(bg_length, bg_length))
+
+startButton = Button((0, 255, 0), 250, 350, 300, 100, 'Game Start!')
+run = True
+while run:
+    screen.fill((255, 255, 255))
+    startButton.draw(screen, (0, 0, 0))
+    pygame.display.update()
+
+    for event in pygame.event.get():
+        pos = pygame.mouse.get_pos()
+
+        if event.type == pygame.QUIT:
+            run = False
+            pygame.quit()
+            quit()
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if startButton.mouse(pos):
+                run = False
+
+        if event.type == pygame.MOUSEMOTION:
+            if startButton.mouse(pos):
+                startButton.color = (255, 0, 0)
+            else :
+                startButton.color = (0, 255, 0)
+
 
 missiles = pygame.sprite.Group()  # 미사일들을 관리하는 Group 객체 missiles 생성
 missiles.add(Missile(100, 100))  # 미사일 객체를 100, 100 좌표에 생성해서 missiles 그룹에 추가
