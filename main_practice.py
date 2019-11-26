@@ -9,9 +9,9 @@ https://www.101computing.net/pygame-how-tos/
 """
 
 import pygame  # pygame 가져오기
-from yejun.missile import Missile  # 장예준이 만든 Missile 클래스
-from junho.airplane import Airplane  # 장준호가 만든 Airplane 클래스
-from yurim.background import Background  # 이유림이 만든 Background 클래스
+from yejun.missile import *  # 장예준이 만든 Missile 클래스
+from junho.airplane import *  # 장준호가 만든 Airplane 클래스
+from yurim.background import *  # 이유림이 만든 Background 클래스
 from yejun.blit_methods import *
 from yurim.button import Button
 
@@ -50,16 +50,13 @@ while run:
         if event.type == pygame.MOUSEMOTION:
             if startButton.mouse(pos):
                 startButton.color = (255, 0, 0)
-            else :
+            else:
                 startButton.color = (0, 255, 0)
 
 
 missiles = pygame.sprite.Group()  # 미사일들을 관리하는 Group 객체 missiles 생성
-missiles.add(Missile(100, 100, 0))  # 미사일 객체를 100, 100 좌표에 보는 각도 0도로 생성해서 missiles 그룹에 추가
-missiles.add(Missile(100, 250, 0))  # 같은 방식
-missiles.add(Missile(100, 400, 0))  # 같은 방식
-missiles.add(Missile(100, 550, 0))  # 같은 방식
-missiles.add(Missile(100, 700, 0))  # 같은 방식
+missiles.add(DrunkMissile(100, 100, 0), MiniMissile(100, 400, 0), DrunkMissile(100, 700, 0))
+# 미사일 객체를 100, 100 좌표에 보는 각도 0도로 생성해서 missiles 그룹에 추가
 
 user_plane = Airplane(400, 400)  # 사용자 비행기 객체 생성
 
@@ -83,7 +80,7 @@ while running:
 
     missiles_collisions = pygame.sprite.groupcollide(missiles, missiles, False, False,
                                                      collided=pygame.sprite.collide_mask)
-    for missile1 in missiles_collisions:
+    for missile1 in missiles_collisions:  # 미사일 충돌 검출
         for missile2 in missiles_collisions[missile1]:
             if missile1 is not missile2:
                 missile1.kill()
