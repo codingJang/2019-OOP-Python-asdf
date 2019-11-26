@@ -28,6 +28,32 @@ backgrounds.add(Background(bg_length, 0))
 backgrounds.add(Background(0, bg_length))
 backgrounds.add(Background(bg_length, bg_length))
 
+startButton = Button((0, 255, 0), 250, 350, 300, 100, 'Game Start!')
+run = True
+while run:
+    screen.fill((255, 255, 255))
+    startButton.draw(screen, (0, 0, 0))
+    pygame.display.update()
+
+    for event in pygame.event.get():
+        pos = pygame.mouse.get_pos()
+
+        if event.type == pygame.QUIT:
+            run = False
+            pygame.quit()
+            quit()
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if startButton.mouse(pos):
+                run = False
+
+        if event.type == pygame.MOUSEMOTION:
+            if startButton.mouse(pos):
+                startButton.color = (255, 0, 0)
+            else :
+                startButton.color = (0, 255, 0)
+
+
 missiles = pygame.sprite.Group()  # 미사일들을 관리하는 Group 객체 missiles 생성
 missiles.add(Missile(100, 100))  # 미사일 객체를 100, 100 좌표에 생성해서 missiles 그룹에 추가
 missiles.add(Missile(100, 250))  # 같은 방식
