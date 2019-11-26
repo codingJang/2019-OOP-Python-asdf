@@ -55,11 +55,11 @@ while run:
 
 
 missiles = pygame.sprite.Group()  # 미사일들을 관리하는 Group 객체 missiles 생성
-missiles.add(Missile(100, 100))  # 미사일 객체를 100, 100 좌표에 생성해서 missiles 그룹에 추가
-missiles.add(Missile(100, 250))  # 같은 방식
-missiles.add(Missile(100, 400))  # 같은 방식
-missiles.add(Missile(100, 550))  # 같은 방식
-missiles.add(Missile(100, 700))  # 같은 방식
+missiles.add(Missile(100, 100, 0))  # 미사일 객체를 100, 100 좌표에 보는 각도 0도로 생성해서 missiles 그룹에 추가
+missiles.add(Missile(100, 250, 0))  # 같은 방식
+missiles.add(Missile(100, 400, 0))  # 같은 방식
+missiles.add(Missile(100, 550, 0))  # 같은 방식
+missiles.add(Missile(100, 700, 0))  # 같은 방식
 
 user_plane = Airplane(400, 400)  # 사용자 비행기 객체 생성
 
