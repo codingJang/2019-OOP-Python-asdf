@@ -62,7 +62,7 @@ class FastMissile(Missile):  # 좀 더 빠른 미사일
     def __init__(self, x, y, angle):
         super().__init__(x, y, angle)
         self.set_speeds(9, 1.5)
-        self.set_initial(x, y, 0)
+        self.set_initial(x, y, angle)
         self.set_image('images/missile2.png')
 
 
@@ -70,6 +70,7 @@ class DirectedMissile(Missile):  # 방향 전환을 하지 않고 직진하는 �
     def __init__(self, x, y, angle):
         super().__init__(x, y, angle)
         self.set_speeds(9, None)
+        self.set_initial(x, y, angle)
         self.set_image('images/missile3.png')
 
     def update(self, screen, plane_loc, plane_vel):
@@ -82,4 +83,19 @@ class MiniMissile(Missile):  # 미니 미사일, 속도 느림
     def __init__(self, x, y, angle):
         super().__init__(x, y, angle)
         self.set_speeds(4, None)
+        self.set_initial(x, y, angle)
         self.set_image('images/missile3.png')
+
+
+class DrunkMissile(Missile):
+    """
+    술 취한 듯 날라가는 미사일 (아직 구현되지 않음)
+    """
+    def __init__(self, x, y, angle):
+        super().__init__(x, y, angle)
+        self.set_speeds(9, None)
+        self.set_initial(x, y, angle)
+        self.set_image('images/missile3.png')
+
+    def update(self, screen, plane_loc, plane_vel):
+        pass
