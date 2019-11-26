@@ -8,22 +8,10 @@ https://www.101computing.net/pygame-how-tos/
 """
 
 import pygame  # pygame 가져오기
-from yejun.missile import Missile  # 장예준이 만든 Missiles 클래스
-from junho.airplane import Airplane  # 장준호가 만든 Airplanes 클래스
-
-
-class Background(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        super().__init__()
-        self.x = x
-        self.y = y
-        self.image = pygame.image.load("yurim/background.png")
-
-
-def center_blit(sprite):
-    screen.blit(sprite.display_image,
-                (sprite.loc.x - sprite.display_image.get_width()/2,
-                 sprite.loc.y - sprite.display_image.get_height()/2))
+from yejun.missile import Missile  # 장예준이 만든 Missile 클래스
+from junho.airplane import Airplane  # 장준호가 만든 Airplane 클래스
+from yurim.background import Background  # 이유림이 만든 Background 클래스
+from yejun.blit_methods import *
 
 
 pygame.init()
@@ -39,18 +27,15 @@ missiles.add(Missile(100, 700))  # 같은 방식
 
 user_plane = Airplane(400, 400)  # 사용자 비행기 객체 생성
 
-bg_length = 800
 backgrounds = pygame.sprite.Group()
-bg1 = Background(0, 0)
-bg2 = Background(bg_length, 0)
-bg3 = Background(0, bg_length)
-bg4 = Background(bg_length, bg_length)
-backgrounds.add(bg1)
-backgrounds.add(bg2)
-backgrounds.add(bg3)
-backgrounds.add(bg4)
 
+bg_length = 800
+backgrounds.add(Background(0, 0))
+backgrounds.add(Background(bg_length, 0))
+backgrounds.add(Background(0, bg_length))
+backgrounds.add(Background(bg_length, bg_length))
 
+"""
 def background_moving(dir_x, dir_y):
 
     for i in backgrounds:
@@ -70,36 +55,31 @@ def background_moving(dir_x, dir_y):
     for i in backgrounds:
         screen.blit(i.image, (i.x, i.y))
 
-    pygame.display.update()
-
+    # pygame.display.update() # 이 부분 틀렸음!!!!
+"""
 
 clock = pygame.time.Clock()  # clock (화면 리프레시 속도 조절용)
-cnt = 0
 running = True
 while running:
-    for event in pygame.event.get():
+    events = pygame.event.get()
+    for event in events:
         if event.type == pygame.QUIT:  # 닫으면 나가기
             running = False
-        if event.type == pygame.KEYDOWN:  # KEYDOWN 이벤트 발생
-            if event.key == pygame.K_LEFT:  # left 를 눌렀다면
-                direction = 'left'
-                cnt += 1
-            if event.key == pygame.K_RIGHT:  # right 를 눌렀다면
-                direction = 'right'
-                cnt += 1
-        if event.type == pygame.KEYUP:  # 키보드에서 손가락을 떼면
-            if event.key in (pygame.K_LEFT, pygame.K_RIGHT):
-                cnt -= 1
-    if cnt == 0 or cnt == 2:
-        direction = 'forward'
     screen.fill((102, 204, 255))    # 배경 사이 틈 같은색으로 매꾸기
-    background_moving(user_plane.vel.x, user_plane.vel.y)
+    # background_moving(user_plane.vel.x, user_plane.vel.y)
 
-    for missile in missiles:  # missiles 그룹 내의 모든 missile 에 대해
-        missile.update(user_plane.loc, user_plane.vel)  # 각 missile 객체의 update 함수 실행! 매개변수: 현재 비행기의 속도 벡터
-        center_blit(missile)  # missile 의 현재 모습을 업데이트
+    # missile_collision = pygame.sprite.groupcollide(missiles, missiles, True, True)
 
-    user_plane.update(direction)
-    center_blit(user_plane)  # user_plane 의 현재 모습을 업데이트
+    for background in backgrounds:
+        background.moving(user_plane.vel)
+        screen.blit(background.image, (background.x, background.y))
+
+    missiles.update(screen, user_plane.loc, user_plane.vel)  # missiles Group 내의 모든 missile 에 대해 update() 함수 실행
+    user_plane.update(screen, events)  # 같은 방식
+
+    plane_collision = pygame.sprite.spritecollide(user_plane, missiles, True, pygame.sprite.collide_mask)
+    if len(plane_collision) != 0:
+        print("DEATH")
+
     pygame.display.update()
     clock.tick(60)  # 화면 리프레시 속도 조절 (60 frames per second)
