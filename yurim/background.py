@@ -9,7 +9,7 @@ class Background(pygame.sprite.Sprite):
         self.length = 800
         self.image = pygame.image.load("yurim/background.png")
 
-    def moving(self, plane_vel):
+    def update(self, screen, plane_vel):
         self.x -= plane_vel.x
         self.y -= plane_vel.y
         if self.x < -self.length:
@@ -20,3 +20,4 @@ class Background(pygame.sprite.Sprite):
             self.y = self.length
         elif self.y > self.length:
             self.y = -self.length
+        screen.blit(self.image, (self.x, self.y))
