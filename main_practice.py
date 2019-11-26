@@ -23,12 +23,9 @@ pygame.display.set_caption("Missiles!")
 
 backgrounds = pygame.sprite.Group()
 bg_length = 800
-backgrounds.add(Background(0, 0))
-backgrounds.add(Background(bg_length, 0))
-backgrounds.add(Background(0, bg_length))
-backgrounds.add(Background(bg_length, bg_length))
+backgrounds.add(Background(0, 0), Background(bg_length, 0), Background(0, bg_length), Background(bg_length, bg_length))
 
-startButton = Button((0, 255, 0), 250, 350, 300, 100, 'Game Start!')
+startButton = Button((0, 255, 0), 250, 500, 300, 100, 'Choose your airplane!')
 run = True
 while run:
     screen.fill((255, 255, 255))
@@ -53,6 +50,39 @@ while run:
             else:
                 startButton.color = (0, 255, 0)
 
+options = pygame.sprite.Group()
+option1 = Button((0, 255, 0), 80, 500, 200, 100, 'Option 1')
+option2 = Button((0, 255, 0), 300, 500, 200, 100, 'Option 2')
+option3 = Button((0, 255, 0), 520, 500, 200, 100, 'Option 3')
+options.add(option1, option2, option3)
+
+run = True
+while run:
+    screen.fill((255, 255, 255))
+    option1.draw(screen, (0, 0, 0))
+    option2.draw(screen, (0, 0, 0))
+    option3.draw(screen, (0, 0, 0))
+    pygame.display.update()
+
+    for event in pygame.event.get():
+        pos = pygame.mouse.get_pos()
+
+        if event.type == pygame.QUIT:
+            run = False
+            pygame.quit()
+            quit()
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            for i in options:
+                if i.mouse(pos):
+                    run = False
+
+        if event.type == pygame.MOUSEMOTION:
+            for i in options:
+                if i.mouse(pos):
+                    i.color = (255, 0, 0)
+                else:
+                    i.color = (0, 255, 0)
 
 missiles = pygame.sprite.Group()  # 미사일들을 관리하는 Group 객체 missiles 생성
 missiles.add(DrunkMissile(100, 100, 0), MiniMissile(100, 400, 0), DrunkMissile(100, 700, 0))

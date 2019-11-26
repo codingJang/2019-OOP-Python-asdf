@@ -1,8 +1,9 @@
 import pygame
 
 
-class Button:
+class Button(pygame.sprite.Sprite):
     def __init__(self, color, x, y, width, height, text=''):
+        super().__init__()
         self.color = color
         self.x = x
         self.y = y
