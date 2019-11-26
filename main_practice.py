@@ -44,7 +44,7 @@ while running:
             running = False
     screen.fill((102, 204, 255))    # 배경 사이 틈 같은색으로 매꾸기
 
-    backgrounds.update(screen, user_plane.vel) # backgrounds Group 내의 모든 background 에 대해 update() 함수 실행
+    backgrounds.update(screen, user_plane.vel)  # backgrounds Group 내의 모든 background 에 대해 update() 함수 실행
     missiles.update(screen, user_plane.loc, user_plane.vel)  # missiles 에 대해 실행
     user_plane.update(screen, events)  # user_plane 의 업데이트 실행
 
