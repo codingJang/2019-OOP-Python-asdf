@@ -9,9 +9,9 @@ https://www.101computing.net/pygame-how-tos/
 """
 
 import pygame  # pygame 가져오기
-from yejun.missile import Missile  # 장예준이 만든 Missile 클래스
-from junho.airplane import Airplane  # 장준호가 만든 Airplane 클래스
-from yurim.background import Background  # 이유림이 만든 Background 클래스
+from yejun.missile import *  # 장예준이 만든 Missile 클래스
+from junho.airplane import *  # 장준호가 만든 Airplane 클래스
+from yurim.background import *  # 이유림이 만든 Background 클래스
 from yejun.blit_methods import *
 from yurim.button import Button
 
@@ -23,12 +23,9 @@ pygame.display.set_caption("Missiles!")
 
 backgrounds = pygame.sprite.Group()
 bg_length = 800
-backgrounds.add(Background(0, 0))
-backgrounds.add(Background(bg_length, 0))
-backgrounds.add(Background(0, bg_length))
-backgrounds.add(Background(bg_length, bg_length))
+backgrounds.add(Background(0, 0), Background(bg_length, 0), Background(0, bg_length), Background(bg_length, bg_length))
 
-startButton = Button((0, 255, 0), 250, 350, 300, 100, 'Game Start!')
+startButton = Button((0, 255, 0), 250, 500, 300, 100, 'Choose your airplane!')
 run = True
 while run:
     screen.fill((255, 255, 255))
@@ -50,16 +47,46 @@ while run:
         if event.type == pygame.MOUSEMOTION:
             if startButton.mouse(pos):
                 startButton.color = (255, 0, 0)
-            else :
+            else:
                 startButton.color = (0, 255, 0)
 
+options = pygame.sprite.Group()
+option1 = Button((0, 255, 0), 80, 500, 200, 100, 'Option 1')
+option2 = Button((0, 255, 0), 300, 500, 200, 100, 'Option 2')
+option3 = Button((0, 255, 0), 520, 500, 200, 100, 'Option 3')
+options.add(option1, option2, option3)
+
+run = True
+while run:
+    screen.fill((255, 255, 255))
+    option1.draw(screen, (0, 0, 0))
+    option2.draw(screen, (0, 0, 0))
+    option3.draw(screen, (0, 0, 0))
+    pygame.display.update()
+
+    for event in pygame.event.get():
+        pos = pygame.mouse.get_pos()
+
+        if event.type == pygame.QUIT:
+            run = False
+            pygame.quit()
+            quit()
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            for i in options:
+                if i.mouse(pos):
+                    run = False
+
+        if event.type == pygame.MOUSEMOTION:
+            for i in options:
+                if i.mouse(pos):
+                    i.color = (255, 0, 0)
+                else:
+                    i.color = (0, 255, 0)
 
 missiles = pygame.sprite.Group()  # 미사일들을 관리하는 Group 객체 missiles 생성
-missiles.add(Missile(100, 100))  # 미사일 객체를 100, 100 좌표에 생성해서 missiles 그룹에 추가
-missiles.add(Missile(100, 250))  # 같은 방식
-missiles.add(Missile(100, 400))  # 같은 방식
-missiles.add(Missile(100, 550))  # 같은 방식
-missiles.add(Missile(100, 700))  # 같은 방식
+missiles.add(DrunkMissile(100, 100, 0), MiniMissile(100, 400, 0), DrunkMissile(100, 700, 0))
+# 미사일 객체를 100, 100 좌표에 보는 각도 0도로 생성해서 missiles 그룹에 추가
 
 user_plane = Airplane(400, 400)  # 사용자 비행기 객체 생성
 
@@ -72,7 +99,7 @@ while running:
             running = False
     screen.fill((102, 204, 255))    # 배경 사이 틈 같은색으로 매꾸기
 
-    backgrounds.update(screen, user_plane.vel) # backgrounds Group 내의 모든 background 에 대해 update() 함수 실행
+    backgrounds.update(screen, user_plane.vel)  # backgrounds Group 내의 모든 background 에 대해 update() 함수 실행
     missiles.update(screen, user_plane.loc, user_plane.vel)  # missiles 에 대해 실행
     user_plane.update(screen, events)  # user_plane 의 업데이트 실행
 
@@ -84,7 +111,7 @@ while running:
 
     missiles_collisions = pygame.sprite.groupcollide(missiles, missiles, False, False,
                                                      collided=pygame.sprite.collide_mask)
-    for missile1 in missiles_collisions:
+    for missile1 in missiles_collisions:  # 미사일 충돌 검출
         for missile2 in missiles_collisions[missile1]:
             if missile1 is not missile2:
                 missile1.kill()
