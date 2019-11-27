@@ -28,7 +28,7 @@ class Missile(pygame.sprite.Sprite):
         self.height = None
         self.set_speeds(7, 1.5)  # 병진 속도 7px/s, 회전 속도 1.5deg/s로 설정 (default)
         self.set_initial(x, y, angle)  # 초기 위치 및 바라보는 방향 설정
-        self.set_image('images/missile_1.png')  # 이미지 고르고 위치 설정
+        self.set_image('images/missile1.png')  # 이미지 고르고 위치 설정
 
     def set_speeds(self, trans_speed, rot_speed):  # 병진, 회전 속력 설정
         self.trans_speed = trans_speed
@@ -64,7 +64,7 @@ class FastMissile(Missile):  # 좀 더 빠른 미사일
         super().__init__(x, y, angle)
         self.set_speeds(9, 1.5)
         self.set_initial(x, y, angle)
-        self.set_image('images/missile_1.png')
+        self.set_image('images/missile1.png')
 
 
 class DirectedMissile(Missile):  # 방향 전환을 하지 않고 직진하는 미사일
@@ -72,7 +72,7 @@ class DirectedMissile(Missile):  # 방향 전환을 하지 않고 직진하는 �
         super().__init__(x, y, angle)
         self.set_speeds(9, None)
         self.set_initial(x, y, angle)
-        self.set_image('images/missile_1.png')
+        self.set_image('images/missile1.png')
 
     def update(self, screen, plane_loc, plane_vel):
         self.loc += self.vel - plane_vel
@@ -88,7 +88,7 @@ class DrunkMissile(Missile):
         super().__init__(x, y, angle)
         self.set_speeds(8, 2)
         self.set_initial(x, y, angle)
-        self.set_image('images/missile_1.png')
+        self.set_image('images/missile1.png')
         self.time = 0
 
     def update(self, screen, plane_loc, plane_vel):
@@ -112,4 +112,4 @@ class MiniMissile(DrunkMissile):  # 미니 미사일, 속도 느림, DrunkMissil
         super().__init__(x, y, angle)
         self.set_speeds(3, 3)
         self.set_initial(x, y, angle)
-        self.set_image('images/missile_1.png')
+        self.set_image('images/missile1.png')
