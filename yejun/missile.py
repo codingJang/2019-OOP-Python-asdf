@@ -5,7 +5,7 @@ from yejun.blit_methods import center_blit
 class Missile(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
-        self.image = pygame.image.load('images/missile_1.png')
+        self.image = pygame.image.load('images/missile1.png')
         self.display_image = self.image
         self.rect = self.display_image.get_rect().move(x, y)
         self.width = self.image.get_width()
