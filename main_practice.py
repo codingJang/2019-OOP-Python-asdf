@@ -14,7 +14,6 @@ from junho.airplane import *  # 장준호가 만든 Airplane 클래스
 from yurim.background import *  # 이유림이 만든 Background 클래스
 from yejun.blit_methods import *
 from yurim.button import Button
-import time
 
 
 pygame.init()
@@ -111,7 +110,8 @@ while running:
         explosion_img = pygame.image.load('images/explosion.jpg')
         screen.blit(explosion_img, (30, 70))
         pygame.display.update()
-        time.sleep(1)
+        sound = pygame.mixer.Sound('images/explosion.m4a')              # 사운드 파일을 로딩한다
+        sound.play()
         running = False
 
     missiles_collisions = pygame.sprite.groupcollide(missiles, missiles, False, False, collided=pygame.sprite.collide_mask)
