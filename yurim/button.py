@@ -28,3 +28,34 @@ class Button(pygame.sprite.Sprite):
                 return True
 
         return False
+
+
+def make_button(screen, sprites, pic):
+    run = True
+    while run:
+        ss = pygame.image.load(pic)
+        screen.blit(ss, (0, 0))
+        for i in sprites:
+            i.draw(screen, (0, 0, 0))
+
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            pos = pygame.mouse.get_pos()
+
+            if event.type == pygame.QUIT:
+                run = False
+                pygame.quit()
+                quit()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                for i in sprites:
+                    if i.mouse(pos):
+                        run = False
+
+            if event.type == pygame.MOUSEMOTION:
+                for i in sprites:
+                    if i.mouse(pos):
+                        i.color = (255, 0, 0)
+                    else:
+                        i.color = (0, 255, 0)
