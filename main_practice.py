@@ -25,7 +25,7 @@ backgrounds = pygame.sprite.Group()
 bg_length = 800
 backgrounds.add(Background(0, 0), Background(bg_length, 0), Background(0, bg_length), Background(bg_length, bg_length))
 
-startButton = Button((0, 255, 0), 250, 500, 300, 100, 'Choose your airplane!')
+startButton = Button((0, 223, 0), 200, 500, 400, 100, 'Choose your airplane!')
 run = True
 while run:
     screen.fill((255, 255, 255))

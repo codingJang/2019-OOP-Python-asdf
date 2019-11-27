@@ -18,7 +18,7 @@ class Button(pygame.sprite.Sprite):
         pygame.draw.rect(screen, self.color, (self.x, self.y, self.width, self.height), 0)
 
         if self.text != '':
-            font = pygame.font.SysFont('comicsans', 60)
+            font = pygame.font.SysFont('comicsans', 50)
             text = font.render(self.text, 1, (0, 0, 0))
             screen.blit(text, (self.x + (self.width/2 - text.get_width()/2), self.y + (self.height/2 - text.get_height()/2)))
 
