@@ -112,4 +112,4 @@ class MiniMissile(DrunkMissile):  # 미니 미사일, 속도 느림, DrunkMissil
         super().__init__(x, y, angle)
         self.set_speeds(3, 3)
         self.set_initial(x, y, angle)
-        self.set_image('images/missile1.png')
+        self.set_image('images/missile2.png')
