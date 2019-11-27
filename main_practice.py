@@ -109,7 +109,7 @@ while running:
     if len(plane_missiles_collisions) != 0:  # 여기가 비행기가 미사일과 충돌했는지 검출하는 부분!
         print("DEATH")
         explosion_img = pygame.image.load('images/explosion.jpg')
-        screen.blit(explosion_img, (0, 0))
+        screen.blit(explosion_img, (30, 70))
         pygame.display.update()
         time.sleep(1)
         running = False
