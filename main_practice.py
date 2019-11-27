@@ -108,6 +108,8 @@ while running:
     if len(plane_missiles_collisions) != 0:  # 여기가 비행기가 미사일과 충돌했는지 검출하는 부분!
         print("DEATH")
 
+        break
+
     missiles_collisions = pygame.sprite.groupcollide(missiles, missiles, False, False,
                                                      collided=pygame.sprite.collide_mask)
     for missile1 in missiles_collisions:  # 미사일 충돌 검출
