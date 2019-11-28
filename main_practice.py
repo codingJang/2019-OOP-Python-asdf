@@ -37,7 +37,7 @@ option1 = Button((0, 255, 0), 80, 500, 200, 100, 'Option 1')
 option2 = Button((0, 255, 0), 300, 500, 200, 100, 'Option 2')
 option3 = Button((0, 255, 0), 520, 500, 200, 100, 'Option 3')
 options.add(option1, option2, option3)
-make_button(screen, options, "yurim/background.png")
+make_button(screen, options, "yurim/airplanebackground.png")
 
 missiles = pygame.sprite.Group()  # 미사일들을 관리하는 Group 객체 missiles 생성
 missiles.add(DrunkMissile(100, 100, 0), MiniMissile(100, 400, 0), DrunkMissile(100, 700, 0))
