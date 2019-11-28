@@ -21,6 +21,11 @@ pygame.init()
 screen = pygame.display.set_mode((800, 800))
 pygame.display.set_caption("Missiles!")
 
+
+backgrounds = pygame.sprite.Group()
+bg_length = 800
+backgrounds.add(Background(0, 0), Background(bg_length, 0), Background(0, bg_length), Background(bg_length, bg_length))
+
 options = pygame.sprite.Group()
 
 startButton = Button((0, 223, 0), 200, 500, 400, 100, 'Choose your airplane!')
@@ -33,10 +38,6 @@ option2 = Button((0, 255, 0), 300, 500, 200, 100, 'Option 2')
 option3 = Button((0, 255, 0), 520, 500, 200, 100, 'Option 3')
 options.add(option1, option2, option3)
 make_button(screen, options, "yurim/background.png")
-
-backgrounds = pygame.sprite.Group()
-bg_length = 800
-backgrounds.add(Background(0, 0), Background(bg_length, 0), Background(0, bg_length), Background(bg_length, bg_length))
 
 missiles = pygame.sprite.Group()  # 미사일들을 관리하는 Group 객체 missiles 생성
 missiles.add(DrunkMissile(100, 100, 0), MiniMissile(100, 400, 0), DrunkMissile(100, 700, 0))
