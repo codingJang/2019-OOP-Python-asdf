@@ -36,11 +36,12 @@ make_button(screen, options, "yurim/startBackground.png")
 options.remove(chooseButton)
 
 # 비행기 옵션 선택
+user_plane = None
 option1 = Button((0, 255, 0), 80, 500, 200, 80, 'Option 1', 1)
 option2 = Button((0, 255, 0), 300, 500, 200, 80, 'Option 2', 2)
 option3 = Button((0, 255, 0), 520, 500, 200, 80, 'Option 3', 3)
-startButton = Button((0, 255, 0), 80, 500, 200, 80, 'Game start', 1)
-backButton = Button((0, 255, 0), 520, 500, 200, 80, 'Back', 2)
+startButton = Button((0, 255, 0), 80, 600, 200, 80, 'Game start', 1)
+backButton = Button((0, 255, 0), 520, 600, 200, 80, 'Back', 2)
 
 page = True
 while page:
@@ -51,14 +52,15 @@ while page:
         options.add(startButton, backButton)
         re = 2
         if op == 1:
-            re = make_button(screen, options, "yurim/background.png")
+            re = make_button(screen, options, "yurim/airplane.png")
             user_plane = Airplane(400, 400, 0)
         elif op == 2:
-            re = make_button(screen, options, "yurim/background.png")
+            re = make_button(screen, options, "yurim/Jetplane.png")
             user_plane = Jetplane(400, 400, 0)
         elif op == 3:
-            re = make_button(screen, options, "yurim/background.png")
+            re = make_button(screen, options, "yurim/stealth.png")
             user_plane = Jetplane(400, 400, 0)
+        options.remove(startButton, backButton)
         if re == 1:
             page = False
         else:
