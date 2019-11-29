@@ -67,6 +67,14 @@ class Airplane(pygame.sprite.Sprite):
 class Jetplane(Airplane):
     def __init__(self, x, y, angle):
         super().__init__(x, y, angle)
-        self.set_speeds(8, 3)
+        self.set_speeds(7, 2)
+        self.set_initial(x, y, angle)
+        self.set_image("images/airplane2.png")
+
+
+class Spaceship(Airplane):
+    def __init__(self, x, y, angle):
+        super().__init__(x, y, angle)
+        self.set_speeds(5, 4)
         self.set_initial(x, y, angle)
         self.set_image("images/airplane3.png")
