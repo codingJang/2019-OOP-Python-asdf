@@ -26,9 +26,12 @@ class Missile(pygame.sprite.Sprite):
         self.rect = None
         self.width = None
         self.height = None
+        self.time = 0
+        self.kill_time = None
         self.set_speeds(7, 1.5)  # 병진 속도 7px/s, 회전 속도 1.5deg/s로 설정 (default)
         self.set_initial(x, y, angle)  # 초기 위치 및 바라보는 방향 설정
         self.set_image('images/missile1.png')  # 이미지 고르고 위치 설정
+        self.set_kill_time(1800)  # kill time 설정
 
     def set_speeds(self, trans_speed, rot_speed):  # 병진, 회전 속력 설정
         self.trans_speed = trans_speed
@@ -46,6 +49,9 @@ class Missile(pygame.sprite.Sprite):
         self.width = self.image.get_width()
         self.height = self.image.get_height()
 
+    def set_kill_time(self, kill_time):
+        self.kill_time = kill_time
+
     def update(self, screen, plane_loc, plane_vel):  # update() 호출마다 위치 및 방향 리프레시
         plane_vec = pygame.math.Vector2(plane_loc - self.loc)
         if self.vel.cross(plane_vec) > 0:
@@ -57,6 +63,9 @@ class Missile(pygame.sprite.Sprite):
         self.loc += self.vel - plane_vel
         self.rect = self.display_image.get_rect().move(self.loc.x, self.loc.y)
         center_blit(screen, self)  # 중심을 기준으로 blit
+        self.time += 1
+        if self.time >= self.kill_time:
+            self.kill()
 
 
 class FastMissile(Missile):  # 좀 더 빠른 미사일
@@ -65,6 +74,7 @@ class FastMissile(Missile):  # 좀 더 빠른 미사일
         self.set_speeds(9, 1.5)
         self.set_initial(x, y, angle)
         self.set_image('images/missile1.png')
+        self.set_kill_time(1800)
 
 
 class DirectedMissile(Missile):  # 방향 전환을 하지 않고 직진하는 미사일
@@ -73,6 +83,7 @@ class DirectedMissile(Missile):  # 방향 전환을 하지 않고 직진하는 �
         self.set_speeds(9, None)
         self.set_initial(x, y, angle)
         self.set_image('images/missile1.png')
+        self.set_kill_time(300)
 
     def update(self, screen, plane_loc, plane_vel):
         self.loc += self.vel - plane_vel
@@ -86,10 +97,9 @@ class DrunkMissile(Missile):
     """
     def __init__(self, x, y, angle):
         super().__init__(x, y, angle)
-        self.set_speeds(8, 2)
+        self.set_speeds(11, 2)
         self.set_initial(x, y, angle)
         self.set_image('images/missile1.png')
-        self.time = 0
 
     def update(self, screen, plane_loc, plane_vel):
         plane_vec = pygame.math.Vector2(plane_loc - self.loc)
@@ -105,6 +115,8 @@ class DrunkMissile(Missile):
         self.rect = self.display_image.get_rect().move(self.loc.x, self.loc.y)
         center_blit(screen, self)  # 중심을 기준으로 blit
         self.time += 1
+        if self.time >= 1800:
+            self.kill()
 
 
 class MiniMissile(DrunkMissile):  # 미니 미사일, 속도 느림, DrunkMissile 상속
