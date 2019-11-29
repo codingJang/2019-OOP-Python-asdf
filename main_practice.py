@@ -102,8 +102,9 @@ while running:
 
     if len(plane_missiles_collisions) != 0:  # 여기가 비행기가 미사일과 충돌했는지 검출하는 부분!
         print("DEATH")
+        font = pygame.font.Font("Teko-Regular.ttf", 50)
         question = font.render('Do you want to replay?', 1, (0, 0, 0))
-        screen.blit(question, (200, 230))
+        screen.blit(question, (240, 310))
         options.add(replayButton, endButton)
         re = make_button(screen, options)
         if re == 1:
