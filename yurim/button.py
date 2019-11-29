@@ -31,11 +31,12 @@ class Button(pygame.sprite.Sprite):
         return False
 
 
-def make_button(screen, sprites, pic):
+def make_button(screen, sprites, pic=None):
     run = True
     while run:
-        ss = pygame.image.load(pic)
-        screen.blit(ss, (0, 0))
+        if pic:
+            ss = pygame.image.load(pic)
+            screen.blit(ss, (0, 0))
         for i in sprites:
             i.draw(screen, (0, 0, 0))
 

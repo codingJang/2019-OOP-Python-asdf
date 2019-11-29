@@ -43,6 +43,10 @@ option3 = Button((0, 255, 0), 520, 500, 200, 80, 'Option 3', 3)
 startButton = Button((0, 255, 0), 80, 600, 200, 80, 'Game start', 1)
 backButton = Button((0, 255, 0), 520, 600, 200, 80, 'Back', 2)
 
+# 게임 진행 여부 버튼
+replayButton = Button((0, 255, 0), 120, 400, 200, 80, 'Replay', 1)
+endButton = Button((0, 255, 0), 480, 400, 200, 80, 'End', 2)
+
 page = True
 while page:
     options.add(option1, option2, option3)
@@ -98,6 +102,14 @@ while running:
 
     if len(plane_missiles_collisions) != 0:  # 여기가 비행기가 미사일과 충돌했는지 검출하는 부분!
         print("DEATH")
+        question = font.render('Do you want to replay?', 1, (0, 0, 0))
+        screen.blit(question, (200, 230))
+        options.add(replayButton, endButton)
+        re = make_button(screen, options)
+        if re == 1:
+            pass
+        elif re == 2:
+            running = False
 
     missiles_collisions = pygame.sprite.groupcollide(missiles, missiles, False, False,
                                                      collided=pygame.sprite.collide_mask)
