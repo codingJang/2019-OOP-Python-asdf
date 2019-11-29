@@ -30,20 +30,41 @@ backgrounds.add(Background(0, 0), Background(bg_length, 0), Background(0, bg_len
 options = pygame.sprite.Group()
 
 # 시작 화면
-startButton = Button((0, 223, 0), 220, 550, 360, 80, 'Choose your airplane!')
-options.add(startButton)
+chooseButton = Button((0, 223, 0), 220, 550, 360, 80, 'Choose your airplane!')
+options.add(chooseButton)
 make_button(screen, options, "yurim/startBackground.png")
-options.remove(startButton)
+options.remove(chooseButton)
 
 # 비행기 옵션 선택
-option1 = Button((0, 255, 0), 80, 500, 200, 100, 'Option 1')
-option2 = Button((0, 255, 0), 300, 500, 200, 100, 'Option 2')
-option3 = Button((0, 255, 0), 520, 500, 200, 100, 'Option 3')
-options.add(option1, option2, option3)
-make_button(screen, options, "yurim/airplanebackground.png")
+option1 = Button((0, 255, 0), 80, 500, 200, 80, 'Option 1', 1)
+option2 = Button((0, 255, 0), 300, 500, 200, 80, 'Option 2', 2)
+option3 = Button((0, 255, 0), 520, 500, 200, 80, 'Option 3', 3)
+startButton = Button((0, 255, 0), 80, 500, 200, 80, 'Game start', 1)
+backButton = Button((0, 255, 0), 520, 500, 200, 80, 'Back', 2)
+
+page = True
+while page:
+    options.add(option1, option2, option3)
+    op = make_button(screen, options, "yurim/airplanebackground.png")
+    if op:
+        options.remove(option1, option2, option3)
+        options.add(startButton, backButton)
+        re = 2
+        if op == 1:
+            re = make_button(screen, options, "yurim/background.png")
+            user_plane = Airplane(400, 400, 0)
+        elif op == 2:
+            re = make_button(screen, options, "yurim/background.png")
+            user_plane = Jetplane(400, 400, 0)
+        elif op == 3:
+            re = make_button(screen, options, "yurim/background.png")
+            user_plane = Jetplane(400, 400, 0)
+        if re == 1:
+            page = False
+        else:
+            continue
 
 missiles = pygame.sprite.Group()  # 미사일들을 관리하는 Group 객체 missiles 생성
-user_plane = Airplane(400, 400)  # 사용자 비행기 객체 생성
 
 clock = pygame.time.Clock()  # clock (화면 리프레시 속도 조절용)
 start_time = pygame.time.get_ticks()    # 게임 시작 시간 저장

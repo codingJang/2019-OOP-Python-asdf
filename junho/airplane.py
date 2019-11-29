@@ -3,19 +3,38 @@ from yejun.blit_methods import center_blit
 
 
 class Airplane(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, angle):
         super().__init__()
-        self.image = pygame.image.load('images/airplane1.png')
-        self.display_image = self.image
-        self.rect = self.display_image.get_rect().move(x, y)
-        self.width = self.image.get_width()/2
-        self.height = self.image.get_height()/2
-        self.trans_speed = 6
-        self.rot_speed = 3
-        self.loc = pygame.math.Vector2(x, y)
-        self.vel = pygame.math.Vector2(self.trans_speed, 0)
+        self.image = None
+        self.display_image = None
+        self.rect = None
+        self.width = None
+        self.height = None
+        self.trans_speed = None
+        self.rot_speed = None
+        self.loc = None
+        self.vel = None
         self.cnt = 0
         self.mode = 'forward'
+        self.set_speeds(6, 3)
+        self.set_initial(x, y, angle)
+        self.set_image('images/airplane1.png')
+
+    def set_speeds(self, trans_speed, rot_speed):  # 병진, 회전 속력 설정
+        self.trans_speed = trans_speed
+        self.rot_speed = rot_speed
+
+    def set_initial(self, x, y, angle):  # 초기 위치 및 방향 설정
+        self.loc = pygame.math.Vector2(x, y)
+        self.vel = pygame.math.Vector2()
+        self.vel.from_polar((self.trans_speed, angle))
+
+    def set_image(self, path):  # 이미지 고르고 위치 설정
+        self.image = pygame.image.load(path)
+        self.display_image = self.image
+        self.rect = self.display_image.get_rect().move(self.loc.x, self.loc.y)
+        self.width = self.image.get_width()
+        self.height = self.image.get_height()
 
     def update(self, screen, events):
         for event in events:
@@ -43,3 +62,11 @@ class Airplane(pygame.sprite.Sprite):
         self.rect = self.display_image.get_rect().move(self.loc.x, self.loc.y)
         self.rect = self.display_image.get_rect().move(self.loc.x, self.loc.y)
         center_blit(screen, self)
+
+
+class Jetplane(Airplane):
+    def __init__(self, x, y, angle):
+        super().__init__(x, y, angle)
+        self.set_speeds(8, 3)
+        self.set_initial(x, y, angle)
+        self.set_image("images/airplane3.png")

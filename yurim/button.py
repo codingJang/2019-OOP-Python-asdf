@@ -2,7 +2,7 @@ import pygame
 
 
 class Button(pygame.sprite.Sprite):
-    def __init__(self, color, x, y, width, height, text=''):
+    def __init__(self, color, x, y, width, height, text='', num=0):
         super().__init__()
         self.color = color
         self.x = x
@@ -10,6 +10,7 @@ class Button(pygame.sprite.Sprite):
         self.width = width
         self.height = height
         self.text = text
+        self.num = num
 
     def draw(self, screen, outline=None):
         if outline:  # 마우스가 화면 밖에 있을 때
@@ -51,7 +52,7 @@ def make_button(screen, sprites, pic):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for i in sprites:
                     if i.mouse(pos):
-                        run = False
+                        return i.num
 
             if event.type == pygame.MOUSEMOTION:
                 for i in sprites:
@@ -59,3 +60,4 @@ def make_button(screen, sprites, pic):
                         i.color = (255, 0, 0)
                     else:
                         i.color = (0, 255, 0)
+
