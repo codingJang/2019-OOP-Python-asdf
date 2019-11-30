@@ -74,7 +74,6 @@ class FastMissile(Missile):  # 좀 더 빠른 미사일
         self.set_speeds(9, 1.5)
         self.set_initial(x, y, angle)
         self.set_image('images/missile1.png')
-        self.set_kill_time(1800)
 
 
 class DirectedMissile(Missile):  # 방향 전환을 하지 않고 직진하는 미사일
@@ -97,7 +96,7 @@ class DrunkMissile(Missile):
     """
     def __init__(self, x, y, angle):
         super().__init__(x, y, angle)
-        self.set_speeds(11, 2)
+        self.set_speeds(10, 2)
         self.set_initial(x, y, angle)
         self.set_image('images/missile1.png')
 
@@ -115,7 +114,7 @@ class DrunkMissile(Missile):
         self.rect = self.display_image.get_rect().move(self.loc.x, self.loc.y)
         center_blit(screen, self)  # 중심을 기준으로 blit
         self.time += 1
-        if self.time >= 1800:
+        if self.time >= self.kill_time:
             self.kill()
 
 

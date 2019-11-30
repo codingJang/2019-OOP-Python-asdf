@@ -14,7 +14,7 @@ class Airplane(pygame.sprite.Sprite):
         self.rot_speed = None
         self.loc = None
         self.vel = None
-        self.cnt = 0
+        self.cnt = None
         self.mode = 'forward'
         self.set_speeds(6, 3)
         self.set_initial(x, y, angle)
@@ -28,6 +28,7 @@ class Airplane(pygame.sprite.Sprite):
         self.loc = pygame.math.Vector2(x, y)
         self.vel = pygame.math.Vector2()
         self.vel.from_polar((self.trans_speed, angle))
+        self.cnt = 0
 
     def set_image(self, path):  # 이미지 고르고 위치 설정
         self.image = pygame.image.load(path)
