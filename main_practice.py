@@ -103,16 +103,16 @@ while running:
     # 아이템 생성
     make_items(items, time_since_enter)
     item_collisions = pygame.sprite.spritecollide(user_plane, items, True, collided=pygame.sprite.collide_mask)
-    for item in item_collisions:  # 아이템 획득 여부(충돌 검출)
-        item.kill()
+    # for item in item_collisions:  # 아이템 획득 여부(충돌 검출)
+    #     item.kill()
+    #     bonus = bonus+1
+    if len(item_collisions) != 0:
         bonus = bonus+1
-        print("*")
 
     plane_missiles_collisions = pygame.sprite.spritecollide(user_plane, missiles, True,
                                                             collided=pygame.sprite.collide_mask)
 
     if len(plane_missiles_collisions) != 0:  # 여기가 비행기가 미사일과 충돌했는지 검출하는 부분!
-        print("DEATH")
         re = ask_replay(screen, options, bonus)
         if re == 1:
             missiles.empty()
