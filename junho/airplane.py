@@ -18,7 +18,6 @@ class Airplane(pygame.sprite.Sprite):
         self.loc = None
         self.vel = None
         self.cnt = None
-        self.mode = 'forward'
         self.set_speeds(6, 3)
         self.set_initial(x, y, angle)
         self.set_image('images/airplane1.png')
@@ -41,27 +40,20 @@ class Airplane(pygame.sprite.Sprite):
         self.width = self.image.get_width()
         self.height = self.image.get_height()
 
-    def update(self, screen, events, stop=False):
-        for event in events:
-            if event.type == pygame.KEYDOWN:  # KEYDOWN 이벤트 발생
-                if event.key == pygame.K_LEFT:  # left 를 눌렀다면
-                    self.mode = 'left'
-                    self.cnt += 1
-                if event.key == pygame.K_RIGHT:  # right 를 눌렀다면
-                    self.mode = 'right'
-                    self.cnt += 1
-            if event.type == pygame.KEYUP:  # 키보드에서 손가락을 떼면
-                if event.key in (pygame.K_LEFT, pygame.K_RIGHT):
-                    self.cnt -= 1
-        if self.cnt == 0 or self.cnt == 2:
-            self.mode = 'forward'
-        if self.mode == 'left':
-            delta_theta = -self.rot_speed
-        if self.mode == 'right':
-            delta_theta = self.rot_speed
-        if self.mode == 'forward':
+    def update(self, screen, pic=None, pause=False):
+        pressed = pygame.key.get_pressed()
+        right = pressed[pygame.K_RIGHT]
+        left = pressed[pygame.K_LEFT]
+        if right and left:
             delta_theta = 0
-        if not stop:
+        elif right:
+            delta_theta = self.rot_speed
+        elif left:
+            delta_theta = -self.rot_speed
+        else:
+            delta_theta = 0
+
+        if not pause:
             self.vel = self.vel.rotate(delta_theta)
             _, theta = self.vel.as_polar()
             self.display_image = pygame.transform.rotate(self.image, -90 - theta)

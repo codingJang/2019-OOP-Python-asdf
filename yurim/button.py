@@ -45,7 +45,7 @@ def make_button(screen, sprites, pic=None, plane=None):
         for i in sprites:
             i.draw(screen, (0, 0, 0))
         if plane is not None:
-            plane.update(screen, events, stop=True)
+            plane.update(screen, pause=True)
 
         for event in events:
             pos = pygame.mouse.get_pos()
@@ -64,4 +64,4 @@ def make_button(screen, sprites, pic=None, plane=None):
                     else:
                         i.color = (0, 255, 0)
 
-            pygame.display.update()
+        pygame.display.update()
