@@ -1,6 +1,6 @@
 import pygame
 import math
-from yejun.blit_methods import center_blit
+from yejun.methods import center_blit
 
 
 class Missile(pygame.sprite.Sprite):

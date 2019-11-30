@@ -13,7 +13,7 @@ class Button(pygame.sprite.Sprite):
         self.num = num
 
     def draw(self, screen, outline=None):
-        if outline:  # 마우스가 화면 밖에 있을 때
+        if outline:
             pygame.draw.rect(screen, outline, (self.x, self.y, self.width, self.height), 0)
 
         pygame.draw.rect(screen, self.color, (self.x, self.y, self.width, self.height), 0)

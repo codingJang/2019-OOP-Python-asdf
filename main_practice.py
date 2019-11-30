@@ -10,11 +10,12 @@ https://www.101computing.net/pygame-how-tos/
 
 import pygame  # pygame 가져오기
 from yejun.missile import *  # 장예준이 만든 Missile 클래스
-from yejun.blit_methods import *
+from yejun.methods import *
 from junho.airplane import *  # 장준호가 만든 Airplane 클래스
 from yurim.background import *  # 이유림이 만든 Background 클래스
 from yurim.button import *
 from yurim.addmissile import *
+from yurim.items import *
 
 
 pygame.init()
@@ -28,6 +29,7 @@ bg_length = 800
 backgrounds.add(Background(0, 0), Background(bg_length, 0), Background(0, bg_length), Background(bg_length, bg_length))
 
 options = pygame.sprite.Group()
+items = pygame.sprite.Group()
 
 # 시작 화면
 chooseButton = Button((0, 223, 0), 220, 550, 360, 80, 'Choose your airplane!')
@@ -42,7 +44,6 @@ option2 = Button((0, 255, 0), 300, 500, 200, 80, 'Option 2', 2)
 option3 = Button((0, 255, 0), 520, 500, 200, 80, 'Option 3', 3)
 startButton = Button((0, 255, 0), 80, 600, 200, 80, 'Game start', 1)
 backButton = Button((0, 255, 0), 520, 600, 200, 80, 'Back', 2)
-
 
 page = True
 while page:
@@ -60,7 +61,7 @@ while page:
             user_plane = Jetplane(400, 400, -90)
         elif op == 3:
             re = make_button(screen, options, "images/stealthtext.png")
-            user_plane = Jetplane(400, 400, -90)
+            user_plane = Spaceship(400, 400, -90)
         options.remove(startButton, backButton)
         if re == 1:
             page = False
@@ -73,8 +74,9 @@ clock = pygame.time.Clock()  # clock (화면 리프레시 속도 조절용)
 start_time = pygame.time.get_ticks()    # 게임 시작 시간 저장
 
 running = True
+bonus = 0
 while running:
-    time_since_enter = (pygame.time.get_ticks() - start_time)//1000  # 게임 시작 이후 진행 시간을 점수로 표시(초 단위)
+    time_since_enter = (pygame.time.get_ticks() - start_time)//1000 + bonus  # 게임 시작 이후 진행 시간을 점수로 표시(초 단위)
     level = time_since_enter//10 + 1    # 레벨은 10초당 1레벨 증가로 지정
     events = pygame.event.get()  # 이벤트 모음
     for event in events:
@@ -83,6 +85,7 @@ while running:
     screen.fill((102, 204, 255))    # 배경 사이 틈 같은색으로 매꾸기
 
     backgrounds.update(screen, user_plane.vel)  # backgrounds Group 내의 모든 background 에 대해 update() 함수 실행
+    items.update(screen, user_plane.vel)
 
     add_missile(missiles, level)   # 게임 레벨에 따른 미사일 생성
     missiles.update(screen, user_plane.loc, user_plane.vel)  # missiles 에 대해 실행
@@ -94,19 +97,32 @@ while running:
     screen.blit(level_text, (10, 5))
     score_text = font.render('Score : ' + str(time_since_enter), 1, (0, 0, 0))
     screen.blit(score_text, (10, 40))
+    bonus_text = font.render('bonus : ' + str(bonus), 1, (0, 0, 0))
+    screen.blit(bonus_text, (680, 5))
+
+    # 아이템 생성
+    make_items(items, time_since_enter)
+    item_collisions = pygame.sprite.spritecollide(user_plane, items, True, collided=pygame.sprite.collide_mask)
+    for item in item_collisions:  # 아이템 획득 여부(충돌 검출)
+        item.kill()
+        bonus = bonus+1
+        print("*")
 
     plane_missiles_collisions = pygame.sprite.spritecollide(user_plane, missiles, True,
                                                             collided=pygame.sprite.collide_mask)
 
     if len(plane_missiles_collisions) != 0:  # 여기가 비행기가 미사일과 충돌했는지 검출하는 부분!
         print("DEATH")
-        re = ask_replay(screen, options)
+        re = ask_replay(screen, options, bonus)
         if re == 1:
             missiles.empty()
             user_plane.set_initial(400, 400, -90)
             start_time = pygame.time.get_ticks()  # 게임 시작 시간 저장
         if re == 2:
             running = False
+        if re == 3:
+            bonus = bonus-1
+            pass
 
     missiles_collisions = pygame.sprite.groupcollide(missiles, missiles, False, False,
                                                      collided=pygame.sprite.collide_mask)

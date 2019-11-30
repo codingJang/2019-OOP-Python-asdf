@@ -1,5 +1,5 @@
 import pygame
-from yejun.blit_methods import center_blit
+from yejun.methods import center_blit
 
 
 class Airplane(pygame.sprite.Sprite):
