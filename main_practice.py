@@ -108,7 +108,6 @@ while running:
         if re == 2:
             running = False
 
-
     missiles_collisions = pygame.sprite.groupcollide(missiles, missiles, False, False,
                                                      collided=pygame.sprite.collide_mask)
     for missile1 in missiles_collisions:  # 미사일 충돌 검출
