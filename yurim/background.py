@@ -1,5 +1,7 @@
 import pygame
 
+__all__ = ['Background']
+
 
 class Background(pygame.sprite.Sprite):
     def __init__(self, x, y):

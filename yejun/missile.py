@@ -1,6 +1,9 @@
 import pygame
 import math
-from yejun.methods import center_blit
+import random
+from yejun.methods import *
+
+__all__ = ['Missile', 'FastMissile', 'DrunkMissile', 'MiniMissile', 'add_missile']
 
 
 class Missile(pygame.sprite.Sprite):
@@ -24,6 +27,7 @@ class Missile(pygame.sprite.Sprite):
         self.image = None
         self.display_image = None
         self.rect = None
+        self.mask = None
         self.width = None
         self.height = None
         self.time = 0
@@ -42,12 +46,14 @@ class Missile(pygame.sprite.Sprite):
         self.vel = pygame.math.Vector2()
         self.vel.from_polar((self.trans_speed, angle))
 
-    def set_image(self, path):  # 이미지 고르고 위치 설정
-        self.image = pygame.image.load(path)
-        self.display_image = self.image
-        self.rect = self.display_image.get_rect().move(self.loc.x, self.loc.y)
-        self.width = self.image.get_width()
-        self.height = self.image.get_height()
+    def set_image(self, path=None):  # 이미지 고르고 위치 설정
+        if path is not None:
+            self.image = pygame.image.load(path)
+            self.display_image = self.image
+            self.width = self.image.get_width()
+            self.height = self.image.get_height()
+        self.rect = center_rect(self)
+        self.mask = pygame.mask.from_surface(self.display_image)
 
     def set_kill_time(self, kill_time):
         self.kill_time = kill_time
@@ -61,7 +67,7 @@ class Missile(pygame.sprite.Sprite):
         _, theta = self.vel.as_polar()
         self.display_image = pygame.transform.rotate(self.image, -theta - 90)
         self.loc += self.vel - plane_vel
-        self.rect = self.display_image.get_rect().move(self.loc.x, self.loc.y)
+        self.set_image()
         center_blit(screen, self)  # 중심을 기준으로 blit
         self.time += 1
         if self.time >= self.kill_time:
@@ -124,3 +130,17 @@ class MiniMissile(DrunkMissile):  # 미니 미사일, 속도 느림, DrunkMissil
         self.set_speeds(3, 3)
         self.set_initial(x, y, angle)
         self.set_image('images/missile2.png')
+
+
+def add_missile(sprites, level):
+    if level < 2:
+        level = 2
+    while len(sprites) < level:
+        ran_num = random.randint(1, 3)
+        ran_x = 100 * random.randint(1, 9)
+        ran_y = 800 * random.randint(0, 2)
+
+        if ran_num == 1:
+            sprites.add(MiniMissile(ran_x, ran_y, 0))
+        elif ran_num == 2:
+            sprites.add(DrunkMissile(ran_x, ran_y, 0))

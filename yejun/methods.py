@@ -1,6 +1,8 @@
 import pygame
 from yurim.button import *
 
+__all__ = ['center_blit', 'center_rect', 'ask_replay']
+
 
 def center_blit(screen, sprite):
     """
@@ -13,7 +15,12 @@ def center_blit(screen, sprite):
                  sprite.loc.y - sprite.display_image.get_height()/2))
 
 
-def ask_replay(screen, options, bonus):
+def center_rect(sprite):
+    return sprite.display_image.get_rect().move(sprite.loc.x - sprite.width/2,
+                                                sprite.loc.y - sprite.height/2)
+
+
+def ask_replay(screen, options, bonus, user_plane):
     font = pygame.font.Font("Teko-Regular.ttf", 50)
     question1 = font.render('Do you want to replay?', 1, (0, 0, 0))
     question2 = font.render('If you have bonus point, you can continue!', 1, (0, 0, 0))
@@ -31,5 +38,5 @@ def ask_replay(screen, options, bonus):
     screen.blit(question1, (240, 280))
     screen.blit(question2, (100, 350))
     options.add(replayButton, endButton)
-    re = make_button(screen, options)
+    re = make_button(screen, options, plane=user_plane)
     return re

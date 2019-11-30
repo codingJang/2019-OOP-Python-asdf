@@ -1,5 +1,7 @@
 import pygame
-from yejun.methods import center_blit
+from yejun.methods import *
+
+__all__ = ['Airplane', 'Jetplane', 'Spaceship']
 
 
 class Airplane(pygame.sprite.Sprite):
@@ -8,6 +10,7 @@ class Airplane(pygame.sprite.Sprite):
         self.image = None
         self.display_image = None
         self.rect = None
+        self.mask = None
         self.width = None
         self.height = None
         self.trans_speed = None
@@ -34,10 +37,11 @@ class Airplane(pygame.sprite.Sprite):
         self.image = pygame.image.load(path)
         self.display_image = self.image
         self.rect = self.display_image.get_rect().move(self.loc.x, self.loc.y)
+        self.mask = pygame.mask.from_surface(self.display_image)
         self.width = self.image.get_width()
         self.height = self.image.get_height()
 
-    def update(self, screen, events):
+    def update(self, screen, events, stop=False):
         for event in events:
             if event.type == pygame.KEYDOWN:  # KEYDOWN 이벤트 발생
                 if event.key == pygame.K_LEFT:  # left 를 눌렀다면
@@ -57,12 +61,13 @@ class Airplane(pygame.sprite.Sprite):
             delta_theta = self.rot_speed
         if self.mode == 'forward':
             delta_theta = 0
-        self.vel = self.vel.rotate(delta_theta)
-        _, theta = self.vel.as_polar()
-        self.display_image = pygame.transform.rotate(self.image, -90 - theta)
-        self.rect = self.display_image.get_rect().move(self.loc.x, self.loc.y)
-        self.rect = self.display_image.get_rect().move(self.loc.x, self.loc.y)
-        center_blit(screen, self)
+        if not stop:
+            self.vel = self.vel.rotate(delta_theta)
+            _, theta = self.vel.as_polar()
+            self.display_image = pygame.transform.rotate(self.image, -90 - theta)
+            self.rect = center_rect(self)
+            self.mask = pygame.mask.from_surface(self.display_image)
+            center_blit(screen, self)
 
 
 class Jetplane(Airplane):

@@ -1,5 +1,7 @@
 import pygame
 
+__all__ = ['Button', 'make_button']
+
 
 class Button(pygame.sprite.Sprite):
     def __init__(self, color, x, y, width, height, text='', num=0):
@@ -31,30 +33,30 @@ class Button(pygame.sprite.Sprite):
         return False
 
 
-def make_button(screen, sprites, pic=None):
+def make_button(screen, sprites, pic=None, plane=None):
     run = True
     while run:
-        if pic:
+        events = pygame.event.get()
+
+        if pic is not None:
             ss = pygame.image.load(pic)
             screen.blit(ss, (0, 0))
+
         for i in sprites:
             i.draw(screen, (0, 0, 0))
+        if plane is not None:
+            plane.update(screen, events, stop=True)
 
-        pygame.display.update()
-
-        for event in pygame.event.get():
+        for event in events:
             pos = pygame.mouse.get_pos()
-
             if event.type == pygame.QUIT:
                 run = False
                 pygame.quit()
                 quit()
-
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for i in sprites:
                     if i.mouse(pos):
                         return i.num
-
             if event.type == pygame.MOUSEMOTION:
                 for i in sprites:
                     if i.mouse(pos):
@@ -62,3 +64,4 @@ def make_button(screen, sprites, pic=None):
                     else:
                         i.color = (0, 255, 0)
 
+            pygame.display.update()
