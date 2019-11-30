@@ -7,7 +7,7 @@ class Background(pygame.sprite.Sprite):
         self.x = x
         self.y = y
         self.length = 800
-        self.image = pygame.image.load("yurim/background.png")
+        self.image = pygame.image.load("images/background.png")
 
     def update(self, screen, plane_vel):
         self.x -= plane_vel.x

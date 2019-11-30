@@ -10,9 +10,9 @@ https://www.101computing.net/pygame-how-tos/
 
 import pygame  # pygame 가져오기
 from yejun.missile import *  # 장예준이 만든 Missile 클래스
-from yejun.blit_methods import *
 from junho.airplane import *  # 장준호가 만든 Airplane 클래스
 from yurim.background import *  # 이유림이 만든 Background 클래스
+from yejun.blit_methods import *
 from yurim.button import *
 from yurim.addmissile import *
 
@@ -32,7 +32,7 @@ options = pygame.sprite.Group()
 # 시작 화면
 chooseButton = Button((0, 223, 0), 220, 550, 360, 80, 'Choose your airplane!')
 options.add(chooseButton)
-make_button(screen, options, "yurim/startBackground.png")
+make_button(screen, options, "images/startBackground.png")
 options.remove(chooseButton)
 
 # 비행기 옵션 선택
@@ -43,24 +43,28 @@ option3 = Button((0, 255, 0), 520, 500, 200, 80, 'Option 3', 3)
 startButton = Button((0, 255, 0), 80, 600, 200, 80, 'Game start', 1)
 backButton = Button((0, 255, 0), 520, 600, 200, 80, 'Back', 2)
 
+# 게임 진행 여부 버튼
+replayButton = Button((0, 255, 0), 120, 400, 200, 80, 'Replay', 1)
+endButton = Button((0, 255, 0), 480, 400, 200, 80, 'End', 2)
+
 
 page = True
 while page:
     options.add(option1, option2, option3)
-    op = make_button(screen, options, "yurim/airplanebackground.png")
+    op = make_button(screen, options, "images/airplanebackground.png")
     if op:
         options.remove(option1, option2, option3)
         options.add(startButton, backButton)
         re = 2
         if op == 1:
-            re = make_button(screen, options, "yurim/airplane.png")
-            user_plane = Airplane(400, 400, -90)
+            re = make_button(screen, options, "images/airplanetext.png")
+            user_plane = Airplane(400, 400, 0)
         elif op == 2:
-            re = make_button(screen, options, "yurim/Jetplane.png")
-            user_plane = Jetplane(400, 400, -90)
+            re = make_button(screen, options, "images/Jetplanetext.png")
+            user_plane = Jetplane(400, 400, 0)
         elif op == 3:
-            re = make_button(screen, options, "yurim/stealth.png")
-            user_plane = Jetplane(400, 400, -90)
+            re = make_button(screen, options, "images/stealthtext.png")
+            user_plane = Spaceship(400, 400, 0)
         options.remove(startButton, backButton)
         if re == 1:
             page = False
@@ -95,17 +99,18 @@ while running:
     score_text = font.render('Score : ' + str(time_since_enter), 1, (0, 0, 0))
     screen.blit(score_text, (10, 40))
 
-    plane_missiles_collisions = pygame.sprite.spritecollide(user_plane, missiles, True,
-                                                            collided=pygame.sprite.collide_mask)
+    plane_missiles_collisions = pygame.sprite.spritecollide(user_plane, missiles, True, collided=pygame.sprite.collide_mask)
 
     if len(plane_missiles_collisions) != 0:  # 여기가 비행기가 미사일과 충돌했는지 검출하는 부분!
         print("DEATH")
-        re = ask_replay(screen, options)
+        font = pygame.font.Font("Teko-Regular.ttf", 50)
+        question = font.render('Do you want to replay?', 1, (0, 0, 0))
+        screen.blit(question, (240, 310))
+        options.add(replayButton, endButton)
+        re = make_button(screen, options)
         if re == 1:
-            missiles.empty()
-            user_plane.set_initial(400, 400, -90)
-
-        if re == 2:
+            pass
+        elif re == 2:
             running = False
 
     missiles_collisions = pygame.sprite.groupcollide(missiles, missiles, False, False,
@@ -118,3 +123,4 @@ while running:
 
     pygame.display.update()
     clock.tick(60)  # 화면 리프레시 속도 조절 (60 frames per second)
+
