@@ -17,7 +17,6 @@ class Button(pygame.sprite.Sprite):
     def draw(self, screen, outline=None):
         if outline:
             pygame.draw.rect(screen, outline, (self.x, self.y, self.width, self.height), 0)
-
         pygame.draw.rect(screen, self.color, (self.x, self.y, self.width, self.height), 0)
 
         if self.text != '':
@@ -33,7 +32,7 @@ class Button(pygame.sprite.Sprite):
         return False
 
 
-def make_button(screen, sprites, pic=None, plane=None):
+def make_button(screen, sprites, pic=None):
     run = True
     while run:
         events = pygame.event.get()
@@ -44,8 +43,6 @@ def make_button(screen, sprites, pic=None, plane=None):
 
         for i in sprites:
             i.draw(screen, (0, 0, 0))
-        if plane is not None:
-            plane.update(screen, pause=True)
 
         for event in events:
             pos = pygame.mouse.get_pos()

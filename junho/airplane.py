@@ -40,7 +40,7 @@ class Airplane(pygame.sprite.Sprite):
         self.width = self.image.get_width()
         self.height = self.image.get_height()
 
-    def update(self, screen, pic=None, pause=False):
+    def update(self, screen, pic=None):
         pressed = pygame.key.get_pressed()
         right = pressed[pygame.K_RIGHT]
         left = pressed[pygame.K_LEFT]
@@ -53,13 +53,12 @@ class Airplane(pygame.sprite.Sprite):
         else:
             delta_theta = 0
 
-        if not pause:
-            self.vel = self.vel.rotate(delta_theta)
-            _, theta = self.vel.as_polar()
-            self.display_image = pygame.transform.rotate(self.image, -90 - theta)
-            self.rect = center_rect(self)
-            self.mask = pygame.mask.from_surface(self.display_image)
-            center_blit(screen, self)
+        self.vel = self.vel.rotate(delta_theta)
+        _, theta = self.vel.as_polar()
+        self.display_image = pygame.transform.rotate(self.image, -90 - theta)
+        self.rect = center_rect(self)
+        self.mask = pygame.mask.from_surface(self.display_image)
+        center_blit(screen, self)
 
 
 class Jetplane(Airplane):

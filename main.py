@@ -9,7 +9,6 @@ https://www.101computing.net/pygame-how-tos/
 """
 
 import pygame  # pygame 가져오기
-from yejun.methods import *  # 장예준이 만든 각종 함수들
 from yejun.missile import *  # 장예준이 만든 Missile 클래스
 from junho.airplane import *  # 장준호가 만든 Airplane 클래스
 from yurim.background import *  # 이유림이 만든 Background 클래스
