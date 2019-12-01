@@ -9,7 +9,6 @@ https://www.101computing.net/pygame-how-tos/
 """
 
 import pygame  # pygame 가져오기
-from yejun.methods import *  # 장예준이 만든 각종 함수들
 from yejun.missile import *  # 장예준이 만든 Missile 클래스
 from junho.airplane import *  # 장준호가 만든 Airplane 클래스
 from yurim.background import *  # 이유림이 만든 Background 클래스
@@ -82,8 +81,6 @@ while running:
     screen.fill((102, 204, 255))    # 배경 사이 틈 같은색으로 매꾸기
 
     time_since_enter = (pygame.time.get_ticks() - start_time) // 1000 + bonus  # 게임 시작 이후 진행 시간을 점수로 표시(초 단위)
-
-    delta_level = time_since_enter // 10 + 1 - level
     level = time_since_enter // 10 + 1  # 레벨은 10초당 1레벨 증가로 지정
 
     add_missile(missiles, level, user_plane.loc)  # 게임 레벨에 따른 미사일 생성

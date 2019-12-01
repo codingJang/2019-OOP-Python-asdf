@@ -150,6 +150,7 @@ while running:
             if missile1 is not missile2:
                 missile1.kill()
                 missile2.kill()
+                bonus += 1
 
     pygame.display.update()
     clock.tick(60)  # 화면 리프레시 속도 조절 (60 frames per second)

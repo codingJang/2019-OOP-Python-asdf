@@ -85,14 +85,15 @@ class FastMissile(Missile):  # 좀 더 빠른 미사일
 class DirectedMissile(Missile):  # 방향 전환을 하지 않고 직진하는 미사일
     def __init__(self, x, y, angle, plane_loc=None):
         super().__init__(x, y, angle)
-        self.set_speeds(9, None)
+        self.set_speeds(12, None)
         if plane_loc is not None:
-            plane_vec = pygame.math.Vector2(plane_loc - self.loc)
-            self.vel = pygame.math.Vector2.scale_to_length(plane_vec, self.trans_speed)
-        else:
-            self.set_initial(x, y, angle)
-        self.set_image('images/missile1.png')
-        self.set_kill_time(300)
+            plane_vec = plane_loc - self.loc
+            plane_vec.scale_to_length(self.trans_speed)
+            _, angle = plane_vec.as_polar()
+        self.set_initial(x, y, angle)
+        self.set_image('images/missile2.png')
+        self.display_image = pygame.transform.rotate(self.image, -angle - 90)
+        self.set_image()
 
     def update(self, screen, plane_loc, plane_vel):
         self.loc += self.vel - plane_vel
@@ -108,7 +109,7 @@ class DrunkMissile(Missile):
         super().__init__(x, y, angle)
         self.set_speeds(10, 2)
         self.set_initial(x, y, angle)
-        self.set_image('images/missile1.png')
+        self.set_image('images/missile3.png')
 
     def update(self, screen, plane_loc, plane_vel):
         plane_vec = pygame.math.Vector2(plane_loc - self.loc)
@@ -142,7 +143,7 @@ def add_missile(sprites, level, plane_loc):
         while len(sprites) < (level + 5) // 3:
             ran_x = 100 * random.randint(1, 9)
             ran_y = 800 * random.randint(0, 2)
-            if level < 10:
+            if level < 5:
                 sprites.add(MiniMissile(ran_x, ran_y, 0))
             else:
                 sprites.add(DirectedMissile(ran_x, ran_y, 0, plane_loc))
