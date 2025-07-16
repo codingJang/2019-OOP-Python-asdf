@@ -2,6 +2,15 @@ import pygame
 
 __all__ = ['Background']
 
+# Global image cache to avoid repeated loading
+_image_cache = {}
+
+def load_cached_image(path):
+    """Load and cache images to avoid repeated disk access"""
+    if path not in _image_cache:
+        _image_cache[path] = pygame.image.load(path)
+    return _image_cache[path]
+
 
 class Background(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -9,7 +18,7 @@ class Background(pygame.sprite.Sprite):
         self.x = x
         self.y = y
         self.length = 800
-        self.image = pygame.image.load("images/background.png")
+        self.image = load_cached_image("images/background.png")  # Use cached loading
 
     def update(self, screen, plane_vel):
         self.x -= plane_vel.x
