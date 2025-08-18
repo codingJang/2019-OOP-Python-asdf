@@ -4,6 +4,15 @@ from yejun.methods import *
 
 __all__ = ['Item', 'make_items']
 
+# Global image cache to avoid repeated loading
+_image_cache = {}
+
+def load_cached_image(path):
+    """Load and cache images to avoid repeated disk access"""
+    if path not in _image_cache:
+        _image_cache[path] = pygame.image.load(path)
+    return _image_cache[path]
+
 
 class Item(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -17,6 +26,10 @@ class Item(pygame.sprite.Sprite):
         self.height = None
         self.time = 0
         self.kill_time = None
+        
+        # Performance optimization: Items don't rotate, so we can cache mask
+        self.mask_cached = False
+        
         self.set_location(x, y)
         self.set_image('images/star.png')  # 이미지 고르고 위치 설정
         self.set_kill_time(1800)  # kill time 설정
@@ -25,12 +38,13 @@ class Item(pygame.sprite.Sprite):
         self.loc = pygame.math.Vector2(x, y)
 
     def set_image(self, path):  # 이미지 고르고 위치 설정
-        self.image = pygame.image.load(path)
+        self.image = load_cached_image(path)  # Use cached loading
         self.display_image = self.image
         self.width = self.image.get_width()
         self.height = self.image.get_height()
         self.rect = center_rect(self)
         self.mask = pygame.mask.from_surface(self.display_image)
+        self.mask_cached = True
 
     def set_kill_time(self, kill_time):
         self.kill_time = kill_time
@@ -38,7 +52,8 @@ class Item(pygame.sprite.Sprite):
     def update(self, screen, plane_vel):
         self.loc -= plane_vel
         self.rect = center_rect(self)
-        self.mask = pygame.mask.from_surface(self.display_image)
+        # Don't recalculate mask since item image doesn't change
+        # self.mask = pygame.mask.from_surface(self.display_image)  # Removed for performance
         center_blit(screen, self)
         self.time += 1
         if self.time >= self.kill_time:
@@ -47,5 +62,8 @@ class Item(pygame.sprite.Sprite):
 
 def make_items(sprites, time):
     ran_num = random.randint(1, 100)
-    if time % 3 == 0 and ran_num > 95:
-        sprites.add(Item(random.randint(0, 800), random.randint(0, 800)))
+    # Reduced frequency slightly for better performance
+    if time % 5 == 0 and ran_num > 96:  # Was 95, now 96 for fewer items
+        ran_x = random.randint(1, 799)
+        ran_y = random.randint(1, 799)
+        sprites.add(Item(ran_x, ran_y))

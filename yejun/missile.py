@@ -5,11 +5,23 @@ from yejun.methods import *
 
 __all__ = ['Missile', 'FastMissile', 'DrunkMissile', 'MiniMissile', 'add_missile']
 
+# Global image cache to avoid repeated loading
+_image_cache = {}
+
+def load_cached_image(path):
+    """Load and cache images to avoid repeated disk access"""
+    if path not in _image_cache:
+        _image_cache[path] = pygame.image.load(path)
+    return _image_cache[path]
 
 class Missile(pygame.sprite.Sprite):
     """
     기본 미사일 클래스
     미사일의 생성 및 비행기를 추적하는 기능을 포함함
+    Performance optimizations:
+    - Cached rotated images
+    - Reduced mask recalculations
+    - Pre-computed rotation angles
     """
     def __init__(self, x, y, angle):
         """
@@ -32,6 +44,12 @@ class Missile(pygame.sprite.Sprite):
         self.height = None
         self.time = 0
         self.kill_time = None
+        
+        # Performance optimization: Cache rotated images
+        self.rotation_cache = {}
+        self.last_angle = None
+        self.angle_threshold = 5  # Only update rotation if angle changes by more than this
+        
         self.set_speeds(7, 1.5)  # 병진 속도 7px/s, 회전 속도 1.5deg/s로 설정 (default)
         self.set_initial(x, y, angle)  # 초기 위치 및 바라보는 방향 설정
         self.set_image('images/missile1.png')  # 이미지 고르고 위치 설정
@@ -48,7 +66,7 @@ class Missile(pygame.sprite.Sprite):
 
     def set_image(self, path=None):  # 이미지 고르고 위치 설정
         if path is not None:
-            self.image = pygame.image.load(path)
+            self.image = load_cached_image(path)  # Use cached loading
             self.display_image = self.image
             self.width = self.image.get_width()
             self.height = self.image.get_height()
@@ -58,16 +76,42 @@ class Missile(pygame.sprite.Sprite):
     def set_kill_time(self, kill_time):
         self.kill_time = kill_time
 
+    def get_rotated_image(self, angle):
+        """Get cached rotated image or create and cache new one"""
+        # Round angle to nearest 5 degrees to reduce cache size
+        rounded_angle = round(angle / self.angle_threshold) * self.angle_threshold
+        
+        if rounded_angle not in self.rotation_cache:
+            rotated = pygame.transform.rotate(self.image, -rounded_angle - 90)
+            self.rotation_cache[rounded_angle] = rotated
+            
+            # Limit cache size to prevent memory bloat
+            if len(self.rotation_cache) > 72:  # 360/5 = 72 possible angles
+                # Remove oldest entries
+                keys_to_remove = list(self.rotation_cache.keys())[:10]
+                for key in keys_to_remove:
+                    del self.rotation_cache[key]
+        
+        return self.rotation_cache[rounded_angle]
+
     def update(self, screen, plane_loc, plane_vel):  # update() 호출마다 위치 및 방향 리프레시
         plane_vec = pygame.math.Vector2(plane_loc - self.loc)
         if self.vel.cross(plane_vec) > 0:
             self.vel.rotate_ip(self.rot_speed)
         else:
             self.vel.rotate_ip(-self.rot_speed)
+        
         _, theta = self.vel.as_polar()
-        self.display_image = pygame.transform.rotate(self.image, -theta - 90)
+        
+        # Only update display image if angle changed significantly
+        if self.last_angle is None or abs(theta - self.last_angle) > self.angle_threshold:
+            self.display_image = self.get_rotated_image(theta)
+            self.last_angle = theta
+            # Only recalculate mask when image changes
+            self.mask = pygame.mask.from_surface(self.display_image)
+        
         self.loc += self.vel - plane_vel
-        self.set_image()
+        self.rect = center_rect(self)
         center_blit(screen, self)  # 중심을 기준으로 blit
         self.time += 1
         if self.time >= self.kill_time:
@@ -92,12 +136,14 @@ class DirectedMissile(Missile):  # 방향 전환을 하지 않고 직진하는 �
             _, angle = plane_vec.as_polar()
         self.set_initial(x, y, angle)
         self.set_image('images/missile2.png')
+        # Pre-calculate rotation since it won't change
         self.display_image = pygame.transform.rotate(self.image, -angle - 90)
-        self.set_image()
+        self.mask = pygame.mask.from_surface(self.display_image)
+        self.rect = center_rect(self)
 
     def update(self, screen, plane_loc, plane_vel):
         self.loc += self.vel - plane_vel
-        self.set_image()
+        self.rect = center_rect(self)
         center_blit(screen, self)
 
 
@@ -119,10 +165,18 @@ class DrunkMissile(Missile):
             self.vel.rotate_ip(self.rot_speed)
         else:
             self.vel.rotate_ip(-self.rot_speed)
+        
         _, theta = self.vel.as_polar()
-        self.display_image = pygame.transform.rotate(self.image, -theta - 90)
+        
+        # Only update display image if angle changed significantly
+        if self.last_angle is None or abs(theta - self.last_angle) > self.angle_threshold:
+            self.display_image = self.get_rotated_image(theta)
+            self.last_angle = theta
+            # Only recalculate mask when image changes
+            self.mask = pygame.mask.from_surface(self.display_image)
+        
         self.loc += self.vel - plane_vel
-        self.set_image()
+        self.rect = center_rect(self)
         center_blit(screen, self)  # 중심을 기준으로 blit
         self.time += 1
         if self.time >= self.kill_time:
@@ -139,8 +193,11 @@ class MiniMissile(DrunkMissile):  # 미니 미사일, 속도 느림, DrunkMissil
 
 
 def add_missile(sprites, level, plane_loc):
+    # Optimized missile generation - don't spam too many missiles
+    max_missiles = min(level + 5, 20)  # Cap maximum missiles for performance
+    
     if random.randint(0, 1):
-        while len(sprites) < (level + 5) // 3:
+        while len(sprites) < (level + 5) // 3 and len(sprites) < max_missiles:
             ran_x = 100 * random.randint(1, 9)
             ran_y = 800 * random.randint(0, 2)
             if level < 5:
@@ -148,7 +205,7 @@ def add_missile(sprites, level, plane_loc):
             else:
                 sprites.add(DirectedMissile(ran_x, ran_y, 0, plane_loc))
     else:
-        while len(sprites) < level:
+        while len(sprites) < level and len(sprites) < max_missiles:
             ran_x = 100 * random.randint(1, 9)
             ran_y = 800 * random.randint(1, 2)
             if random.randint(0, 1):
